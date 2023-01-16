@@ -4,6 +4,7 @@ import com.example.secondteamproject.dto.token.TokenRequestDto;
 import com.example.secondteamproject.dto.token.TokenResponseDto;
 import com.example.secondteamproject.dto.user.SigninRequestDto;
 import com.example.secondteamproject.dto.user.SignupRequestDto;
+import com.example.secondteamproject.entity.Admin;
 import com.example.secondteamproject.entity.User;
 import com.example.secondteamproject.jwt.JwtUtil;
 import com.example.secondteamproject.security.UserDetailsImpl;
@@ -30,6 +31,7 @@ public class UserController {
         userService.signup(signupRequestDto);
         return "success";
     }
+
     @ResponseBody
     @PostMapping("/signin")
     public TokenResponseDto signin(@RequestBody SigninRequestDto signinRequestDto) {
@@ -55,17 +57,26 @@ public class UserController {
     @PostMapping("/reissue")
     public TokenResponseDto reissue(HttpServletRequest request, @RequestBody TokenRequestDto tokenRequestDto) {
         String resolvedAccessToken = jwtUtil.resolveAccessToken(tokenRequestDto.getAccessToken());
-        //Access 토큰 username가져오기
         Authentication authenticationAccessToken = jwtUtil.getAuthentication(resolvedAccessToken);
-        User accessUser = userService.findByUsername(authenticationAccessToken.getName());
-        //Refrest 토큰 username가져오기
         String refreshToken = request.getHeader(JwtUtil.REFRESH_AUTHORIZATION_HEADER);
         String resolvedRefreshToken = jwtUtil.resolveRefreshToken(refreshToken);
         Authentication authenticationFreshToken = jwtUtil.getAuthentication(resolvedRefreshToken);
+        //Refrest 토큰 username가져오기
         User refreshUser = userService.findByUsername(authenticationFreshToken.getName());
-        //두개 비교 후 맞으면 재발행
-        if (accessUser == refreshUser) {
-            return userService.reissue(refreshUser.getUsername(), refreshUser.getRole());
+        if (refreshUser == null) {
+            //Access,refreshtoken 토큰 adminname가져오기
+            Admin refreshAdmin = userService.findByAdminname(authenticationFreshToken.getName());
+            Admin accessAdmin = userService.findByAdminname(authenticationAccessToken.getName());
+            if (accessAdmin == refreshAdmin) {
+                return userService.reissue(refreshAdmin.getAdminName(), refreshAdmin.getRole());
+            }
+        } else {
+            //Access 토큰 username가져오기
+            User accessUser = userService.findByUsername(authenticationAccessToken.getName());
+            //두개 비교 후 맞으면 재발행
+            if (accessUser == refreshUser) {
+                return userService.reissue(refreshUser.getUsername(), refreshUser.getRole());
+            }
         }
         throw new IllegalStateException("Vaild Error");
     }

@@ -23,13 +23,10 @@ public class User {
     private String password;
 
 
-    @Column(nullable = false)
     @Enumerated(value = EnumType.STRING)
     private UserRoleEnum role;
 
-    @Column(nullable = false)
     private String img;
-    @Column(nullable = false)
     private String nickname;
     public User(String username, String password, UserRoleEnum role,String img, String nickname) {
         this.username = username;
@@ -48,4 +45,5 @@ public class User {
     public boolean isWriter(String username) {
         return getUsername().equals(username);
     }
+
 }

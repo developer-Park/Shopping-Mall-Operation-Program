@@ -35,13 +35,13 @@ public class UserServiceImpl implements UserService {
         String password = passwordEncoder.encode(signupRequestDto.getPassword());
 
         //회원 중복 확인
-        Optional<User> found = userRepository.findByUsername(name);
-        if (found.isPresent()) {
+        User foundUser = userRepository.findByUsername(name);
+        if (foundUser != null) {
             throw new IllegalArgumentException("Duplicated user");
         }
 
-        Optional<Admin> admin = adminRepository.findByAdminName(name);
-        if (admin.isPresent()) {
+        Admin admin = adminRepository.findByAdminName(name);
+        if (admin != null) {
             throw new IllegalArgumentException("Duplicated admin user");
         }
 
@@ -73,10 +73,21 @@ public class UserServiceImpl implements UserService {
     public TokenResponseDto signin(SigninRequestDto signinRequestDto) {
         String username = signinRequestDto.getUsername();
         String password = signinRequestDto.getPassword();
+
         // 사용자 확인
-        User user = userRepository.findByUsername(username).orElseThrow(
-                () -> new IllegalArgumentException("Not found user")
-        );
+        User user = userRepository.findByUsername(username);
+        if (user == null) {
+            Admin admin = adminRepository.findByAdminName(username);
+            if (admin == null) {
+                throw new IllegalArgumentException("Not found admin");
+            }
+            if (!passwordEncoder.matches(password, admin.getPassword())) {
+                throw new IllegalArgumentException("Wrong password");
+            }
+            String accessToken = jwtUtil.createToken(admin.getAdminName(), admin.getRole());
+            String refreshToken1 = jwtUtil.refreshToken(admin.getAdminName(), admin.getRole());
+            return new TokenResponseDto(accessToken, refreshToken1);
+        }
         // 비밀번호 확인
         if (!passwordEncoder.matches(password, user.getPassword())) {
             throw new IllegalArgumentException("Wrong password");
@@ -115,6 +126,10 @@ public class UserServiceImpl implements UserService {
 
     ////
     public User findByUsername(String name) {
-        return userRepository.findByUsername(name).orElseThrow();
+        return userRepository.findByUsername(name);
+    }
+
+    public Admin findByAdminname(String name) {
+        return adminRepository.findByAdminName(name);
     }
 }

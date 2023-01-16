@@ -24,9 +24,7 @@ public class Seller {
     @Enumerated(value = EnumType.STRING)
     private UserRoleEnum role;
 
-    @Column(nullable = false)
     private String img;
-    @Column(nullable = false)
     private String nickname;
 
     public Seller(Long id, String sellerName, String password, UserRoleEnum role, String img,String nickname) {
