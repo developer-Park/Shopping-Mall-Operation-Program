@@ -10,17 +10,15 @@ import com.example.secondteamproject.entity.UserRoleEnum;
 import com.example.secondteamproject.jwt.JwtUtil;
 import com.example.secondteamproject.repository.AdminRepository;
 import com.example.secondteamproject.repository.UserRepository;
-import com.example.secondteamproject.service.UserService;
+import com.example.secondteamproject.service.GeneralService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Optional;
-
 @Service
 @RequiredArgsConstructor
-public class UserServiceImpl implements UserService {
+public class GeneralServiceImpl implements GeneralService {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
@@ -132,4 +130,7 @@ public class UserServiceImpl implements UserService {
     public Admin findByAdminname(String name) {
         return adminRepository.findByAdminName(name);
     }
+
+
+
 }

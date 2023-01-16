@@ -2,12 +2,11 @@ package com.example.secondteamproject.entity;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-
 import javax.persistence.*;
 @Getter
 @NoArgsConstructor
 @Entity(name = "admins")
-public class Admin {
+public class Admin extends Timestamped {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

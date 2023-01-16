@@ -8,7 +8,7 @@ import com.example.secondteamproject.entity.Admin;
 import com.example.secondteamproject.entity.User;
 import com.example.secondteamproject.jwt.JwtUtil;
 import com.example.secondteamproject.security.UserDetailsImpl;
-import com.example.secondteamproject.service.UserService;
+import com.example.secondteamproject.service.GeneralService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
@@ -20,22 +20,22 @@ import javax.servlet.http.HttpServletRequest;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/users")
-public class UserController {
+@RequestMapping("/general")
+public class GeneralController {
 
-    private final UserService userService;
+    private final GeneralService generalService;
     private final JwtUtil jwtUtil;
 
     @PostMapping("/signup")
     public String signup(@Validated @RequestBody SignupRequestDto signupRequestDto) {
-        userService.signup(signupRequestDto);
+        generalService.signup(signupRequestDto);
         return "success";
     }
 
     @ResponseBody
     @PostMapping("/signin")
     public TokenResponseDto signin(@RequestBody SigninRequestDto signinRequestDto) {
-        return userService.signin(signinRequestDto);
+        return generalService.signin(signinRequestDto);
     }
 
 
@@ -47,7 +47,7 @@ public class UserController {
     @DeleteMapping("/{userId}")
     public String deleteUser(@PathVariable Long userId,
                              @AuthenticationPrincipal UserDetailsImpl userDetails) {
-        if (userService.deleteUser(userId, userDetails.getUser())) {
+        if (generalService.deleteUser(userId, userDetails.getUser())) {
             return "Success delete user";
         } else {
             throw new IllegalArgumentException("Failed delete user");
@@ -62,22 +62,24 @@ public class UserController {
         String resolvedRefreshToken = jwtUtil.resolveRefreshToken(refreshToken);
         Authentication authenticationFreshToken = jwtUtil.getAuthentication(resolvedRefreshToken);
         //Refrest 토큰 username가져오기
-        User refreshUser = userService.findByUsername(authenticationFreshToken.getName());
+        User refreshUser = generalService.findByUsername(authenticationFreshToken.getName());
         if (refreshUser == null) {
             //Access,refreshtoken 토큰 adminname가져오기
-            Admin refreshAdmin = userService.findByAdminname(authenticationFreshToken.getName());
-            Admin accessAdmin = userService.findByAdminname(authenticationAccessToken.getName());
+            Admin refreshAdmin = generalService.findByAdminname(authenticationFreshToken.getName());
+            Admin accessAdmin = generalService.findByAdminname(authenticationAccessToken.getName());
             if (accessAdmin == refreshAdmin) {
-                return userService.reissue(refreshAdmin.getAdminName(), refreshAdmin.getRole());
+                return generalService.reissue(refreshAdmin.getAdminName(), refreshAdmin.getRole());
             }
-        } else {
-            //Access 토큰 username가져오기
-            User accessUser = userService.findByUsername(authenticationAccessToken.getName());
-            //두개 비교 후 맞으면 재발행
-            if (accessUser == refreshUser) {
-                return userService.reissue(refreshUser.getUsername(), refreshUser.getRole());
-            }
+        }
+        //Access 토큰 username가져오기
+        User accessUser = generalService.findByUsername(authenticationAccessToken.getName());
+        //두개 비교 후 맞으면 재발행
+        if (accessUser == refreshUser) {
+            assert refreshUser != null;
+            return generalService.reissue(refreshUser.getUsername(), refreshUser.getRole());
         }
         throw new IllegalStateException("Vaild Error");
     }
 }
+
+
