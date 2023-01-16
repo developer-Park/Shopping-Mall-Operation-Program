@@ -68,6 +68,7 @@ public class WebSecurityConfig {
         http.authorizeHttpRequests()
                 .antMatchers("/users/**").permitAll()
                 .antMatchers("/admins/**").permitAll()
+                .antMatchers("/general/**").permitAll()
                 //Swagger set up
                 //Writer By Park
                 .anyRequest().authenticated()

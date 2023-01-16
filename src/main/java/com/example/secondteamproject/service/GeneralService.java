@@ -7,7 +7,7 @@ import com.example.secondteamproject.entity.Admin;
 import com.example.secondteamproject.entity.User;
 import com.example.secondteamproject.entity.UserRoleEnum;
 
-public interface UserService {
+public interface GeneralService {
     void signup(SignupRequestDto signupRequestDto);
     TokenResponseDto signin(SigninRequestDto signinRequestDto);
     TokenResponseDto reissue(String username, UserRoleEnum role);
