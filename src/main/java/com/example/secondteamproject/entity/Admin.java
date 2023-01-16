@@ -23,9 +23,7 @@ public class Admin {
     @Enumerated(value = EnumType.STRING)
     private UserRoleEnum role;
 
-    @Column(nullable = false)
     private String img;
-
 
     public Admin(String adminName, String password, UserRoleEnum role,String img) {
         this.adminName = adminName;
