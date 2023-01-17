@@ -26,6 +26,7 @@ public class GeneralServiceImpl implements GeneralService {
     private static final String ADMIN_TOKEN = "AAABnvxRVklrnYxKZ0aHgTBcXukeZygoC";
     private final AdminRepository adminRepository;
 
+
     @Transactional
     public void signup(SignupRequestDto signupRequestDto) {
 
@@ -92,6 +93,7 @@ public class GeneralServiceImpl implements GeneralService {
         }
         String accessToken = jwtUtil.createToken(user.getUsername(), user.getRole());
         String refreshToken1 = jwtUtil.refreshToken(user.getUsername(), user.getRole());
+
         return new TokenResponseDto(accessToken, refreshToken1);
     }
 
@@ -130,6 +132,8 @@ public class GeneralServiceImpl implements GeneralService {
     public Admin findByAdminname(String name) {
         return adminRepository.findByAdminName(name);
     }
+
+
 
 
 

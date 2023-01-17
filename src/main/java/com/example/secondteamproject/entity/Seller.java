@@ -24,8 +24,12 @@ public class Seller extends Timestamped {
     @Enumerated(value = EnumType.STRING)
     private UserRoleEnum role;
 
+    private String description;
+
     private String img;
     private String nickname;
+
+    private String email;
 
     public Seller(Long id, String sellerName, String password, UserRoleEnum role, String img,String nickname) {
         this.id = id;

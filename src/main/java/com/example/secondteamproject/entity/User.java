@@ -8,7 +8,7 @@ import javax.persistence.*;
 
 @Getter
 @NoArgsConstructor
-@Entity(name = "users")
+@Entity(name = "customers")
 public class User extends Timestamped{
 
     @Id
@@ -16,7 +16,7 @@ public class User extends Timestamped{
     @Column(name = "USER_ID")
     private Long id;
 
-    @Column(nullable = false, unique = true)
+    @Column(nullable = false)
     private String username;
 
     @Column(nullable = false)
@@ -27,8 +27,12 @@ public class User extends Timestamped{
     private UserRoleEnum role;
 
     private String img;
+    private String imgPath;
+
     private String nickname;
-    public User(String username, String password, UserRoleEnum role,String img, String nickname) {
+
+    private String email;
+    public User(String username, String password, UserRoleEnum role, String img, String nickname) {
         this.username = username;
         this.password = password;
         this.role = role;
