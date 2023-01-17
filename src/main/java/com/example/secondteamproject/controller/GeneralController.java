@@ -2,6 +2,7 @@ package com.example.secondteamproject.controller;
 
 import com.example.secondteamproject.dto.token.TokenRequestDto;
 import com.example.secondteamproject.dto.token.TokenResponseDto;
+import com.example.secondteamproject.dto.user.LogOutRequestDTO;
 import com.example.secondteamproject.dto.user.SigninRequestDto;
 import com.example.secondteamproject.dto.user.SignupRequestDto;
 import com.example.secondteamproject.entity.Admin;
@@ -10,10 +11,10 @@ import com.example.secondteamproject.jwt.JwtUtil;
 import com.example.secondteamproject.security.UserDetailsImpl;
 import com.example.secondteamproject.service.GeneralService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.validation.Errors;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -49,12 +50,18 @@ public class GeneralController {
     @DeleteMapping("/{userId}")
     public String deleteUser(@PathVariable Long userId,
                              @AuthenticationPrincipal UserDetailsImpl userDetails) {
-        if (generalService.deleteUser(userId, userDetails.getUser())) {
-            return "Success delete user";
+        if (userDetails.getUser() == null) {
+            if (generalService.deleteUserByAdmin(userId, userDetails.getAdmin())) {
+                return "Success delete user by admin";
+            }
         } else {
-            throw new IllegalArgumentException("Failed delete user");
+            generalService.deleteUser(userId, userDetails.getUser());
+            return "Success delete user";
         }
+        throw new IllegalArgumentException("FAILED DELETE USER");
     }
+
+
 
     @PostMapping("/reissue")
     public TokenResponseDto reissue(HttpServletRequest request, @RequestBody TokenRequestDto tokenRequestDto) {
@@ -82,6 +89,14 @@ public class GeneralController {
         }
         throw new IllegalStateException("Vaild Error");
     }
+
+    @PostMapping("/logout")
+    public String logout(@Validated @RequestBody LogOutRequestDTO logout, Errors errors) {
+        generalService.logout(logout);
+        // validation check
+        return "Success Logout";
+    }
+
 }
 
 

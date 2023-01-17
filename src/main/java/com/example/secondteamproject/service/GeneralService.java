@@ -6,6 +6,7 @@ import com.example.secondteamproject.dto.user.SignupRequestDto;
 import com.example.secondteamproject.entity.Admin;
 import com.example.secondteamproject.entity.User;
 import com.example.secondteamproject.entity.UserRoleEnum;
+import com.example.secondteamproject.dto.user.LogOutRequestDTO;
 
 public interface GeneralService {
     void signup(SignupRequestDto signupRequestDto);
@@ -14,4 +15,10 @@ public interface GeneralService {
     boolean deleteUser(Long id, User user);
     User findByUsername(String name);
     Admin findByAdminname(String name);
+
+    //redis
+    void logout(LogOutRequestDTO logout);
+
+    boolean deleteUserByAdmin(Long id, Admin admin);
+
 }
