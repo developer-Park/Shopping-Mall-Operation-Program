@@ -165,4 +165,29 @@ public class JwtUtil {
     }
 
 
+
+    public String logoutRefreshToken(String username, UserRoleEnum role) {
+        Date date = new Date();
+        return REFRESH_PREFIX +
+                Jwts.builder()
+                        .setSubject(username)
+                        .claim(AUTHORIZATION_KEY, role)
+                        .setExpiration(new Date(date.getTime() + REFRESH_TOKEN_TIME))
+                        .setIssuedAt(date)
+                        .signWith(key, signatureAlgorithm)
+                        .compact();
+    }
+
+    public String logoutCreateToken(String username, UserRoleEnum role) {
+        Date date = new Date();
+        return BEARER_PREFIX +
+                Jwts.builder()
+                        .setSubject(username)
+                        .claim(AUTHORIZATION_KEY, role)
+                        .setExpiration(new Date(date.getTime() + ACCESS_TOKEN_TIME))
+                        .setIssuedAt(date)
+                        .signWith(key, signatureAlgorithm)
+                        .compact();
+    }
+
 }

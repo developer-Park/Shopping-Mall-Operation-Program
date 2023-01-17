@@ -10,6 +10,7 @@ import com.example.secondteamproject.jwt.JwtUtil;
 import com.example.secondteamproject.security.UserDetailsImpl;
 import com.example.secondteamproject.service.GeneralService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -31,6 +32,7 @@ public class GeneralController {
         generalService.signup(signupRequestDto);
         return "success";
     }
+
 
     @ResponseBody
     @PostMapping("/signin")

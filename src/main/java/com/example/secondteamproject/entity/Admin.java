@@ -24,6 +24,9 @@ public class Admin extends Timestamped {
 
     private String img;
 
+    private String email;
+
+
     public Admin(String adminName, String password, UserRoleEnum role,String img) {
         this.adminName = adminName;
         this.password = password;

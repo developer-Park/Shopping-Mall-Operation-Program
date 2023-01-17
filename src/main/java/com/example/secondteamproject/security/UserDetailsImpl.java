@@ -3,11 +3,9 @@ package com.example.secondteamproject.security;
 import com.example.secondteamproject.entity.Admin;
 import com.example.secondteamproject.entity.User;
 import com.example.secondteamproject.entity.UserRoleEnum;
-import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.Collection;

@@ -16,7 +16,7 @@ public class Item extends Timestamped {
     private Long id;
     private String itemName;
     @ManyToOne
-    @JoinColumn (name = "seller_id")
+    @JoinColumn (name = "SELLER_ID")
     private Seller seller;
     private int price;
     private String description;
