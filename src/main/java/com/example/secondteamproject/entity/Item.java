@@ -1,5 +1,6 @@
 package com.example.secondteamproject.entity;
 
+import com.example.secondteamproject.category.Category;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 

@@ -38,6 +38,9 @@ public class JwtUtil {
     public static final String REFRESH_PREFIX = "Refres "; //토큰 식별자.
     private static final long ACCESS_TOKEN_TIME = 60 * 60 * 1000L; //1 hour // 60min X 60sec X 1000ms
     private static final Long REFRESH_TOKEN_TIME = 14 * 24 * 60 * 60 * 1000L; // 14 day
+
+    private static final long LOGOUT_TOKEN_TIME = 5000L; //1 hour // 60min X 60sec X 1000ms
+
     @Value("${jwt.secret.key}")
     private String secretKey;
     private Key key;
@@ -48,6 +51,7 @@ public class JwtUtil {
         byte[] bytes = Base64.getDecoder().decode(secretKey);
         key = Keys.hmacShaKeyFor(bytes);
     }
+
     // header에서 토큰 가져오기
     public String resolveToken(HttpServletRequest request) {
         String bearerToken = request.getHeader(AUTHORIZATION_HEADER); // Authorization의 키로 오는 Bearer Token  == 토큰으로 나를 증명한다 (약속)
@@ -60,6 +64,7 @@ public class JwtUtil {
     /**
      * Writer by Park
      * this method for Refresh token in UserService
+     *
      * @param bearerToken
      * @return token value without bearer
      */
@@ -69,6 +74,7 @@ public class JwtUtil {
         }
         return null;
     }
+
     public String resolveRefreshToken(String bearerToken) {
         if (StringUtils.hasText(bearerToken) && bearerToken.startsWith(REFRESH_PREFIX)) {
             return bearerToken.substring(7);
@@ -91,20 +97,22 @@ public class JwtUtil {
 
     /**
      * Writer by Park
+     *
      * @param username
      * @return create refresh token
      */
     public String refreshToken(String username, UserRoleEnum role) {
-            Date date = new Date();
-            return REFRESH_PREFIX +
-                    Jwts.builder()
-                            .setSubject(username)
-                            .claim(AUTHORIZATION_KEY, role)
-                            .setExpiration(new Date(date.getTime() + REFRESH_TOKEN_TIME))
-                            .setIssuedAt(date)
-                            .signWith(key, signatureAlgorithm)
-                            .compact();
-        }
+        Date date = new Date();
+        return REFRESH_PREFIX +
+                Jwts.builder()
+                        .setSubject(username)
+                        .claim(AUTHORIZATION_KEY, role)
+                        .setExpiration(new Date(date.getTime() + REFRESH_TOKEN_TIME))
+                        .setIssuedAt(date)
+                        .signWith(key, signatureAlgorithm)
+                        .compact();
+    }
+
     // 토큰 검증
     public boolean validateToken(String token) {
         try {
@@ -121,11 +129,12 @@ public class JwtUtil {
         }
         return false;
     }
+
     // 토큰에서 사용자 정보 가져오기
     public Claims getUserInfoFromToken(String token) {
         try {
             return Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token).getBody();
-        }catch(ExpiredJwtException e) {
+        } catch (ExpiredJwtException e) {
             return e.getClaims();
         }
     }
@@ -137,7 +146,7 @@ public class JwtUtil {
             String username = claims.getSubject();
             UserRoleEnum role = UserRoleEnum.valueOf(claims.get("auth").toString());
             return new AuthenticatedUser(role, username);
-        }else {
+        } else {
             throw new IllegalArgumentException("유효하지 않은 토큰!!");
         }
     }
@@ -150,6 +159,7 @@ public class JwtUtil {
 
     /**
      * Writer by Park
+     *
      * @param token
      * @return Extract Authentication from token
      */
@@ -165,29 +175,20 @@ public class JwtUtil {
     }
 
 
+    //redis
 
-    public String logoutRefreshToken(String username, UserRoleEnum role) {
-        Date date = new Date();
-        return REFRESH_PREFIX +
-                Jwts.builder()
-                        .setSubject(username)
-                        .claim(AUTHORIZATION_KEY, role)
-                        .setExpiration(new Date(date.getTime() + REFRESH_TOKEN_TIME))
-                        .setIssuedAt(date)
-                        .signWith(key, signatureAlgorithm)
-                        .compact();
-    }
+    public Long getExpiration(String token) {
+        // accessToken 남은 유효시간
 
-    public String logoutCreateToken(String username, UserRoleEnum role) {
-        Date date = new Date();
-        return BEARER_PREFIX +
-                Jwts.builder()
-                        .setSubject(username)
-                        .claim(AUTHORIZATION_KEY, role)
-                        .setExpiration(new Date(date.getTime() + ACCESS_TOKEN_TIME))
-                        .setIssuedAt(date)
-                        .signWith(key, signatureAlgorithm)
-                        .compact();
+        System.out.println("###########익스파이어토큰" + token);
+        Date expiration = Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token).getBody().getExpiration();
+        System.out.println("##########익스파이어#########" + expiration);
+        // 현재 시간
+        Long now = new Date().getTime();
+        System.out.println("##########현재시간#########" + now);
+
+        return (expiration.getTime() - now);
+
     }
 
 }

@@ -6,10 +6,13 @@ import io.jsonwebtoken.Claims;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.util.ObjectUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import javax.servlet.FilterChain;
@@ -23,6 +26,8 @@ import java.io.IOException;
 public class JwtAuthFilter extends OncePerRequestFilter {
 
     private final JwtUtil jwtUtil;
+    //redis
+    private final RedisTemplate redisTemplate;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
@@ -54,6 +59,7 @@ public class JwtAuthFilter extends OncePerRequestFilter {
         context.setAuthentication(authentication);
         SecurityContextHolder.setContext(context);
     }
+
     public void jwtExceptionHandler(HttpServletResponse response, String msg, int statusCode) {
         response.setStatus(statusCode);
         response.setContentType("application/json");
@@ -64,13 +70,21 @@ public class JwtAuthFilter extends OncePerRequestFilter {
             log.error(e.getMessage());
         }
     }
+
     public void validCheckAndGetUserinfoAndSetAuthentication(String Token, HttpServletResponse response) {
         if (!jwtUtil.validateToken(Token)) {
-            jwtExceptionHandler(response, "Access Token Error", HttpStatus.UNAUTHORIZED.value());
+            System.out.println("JWTAUTHFILTER73 : " + Token);
+            jwtExceptionHandler(response, "Logout account relogin please", 404);
             return;
         }
-        Claims info = jwtUtil.getUserInfoFromToken(Token);
-        setAuthentication(info.getSubject());
+        //redis
+        String isLogout = (String) redisTemplate.opsForValue().get(Token);
+        System.out.println("JWTAUTHFILTER79 : " + isLogout);
+        if (ObjectUtils.isEmpty(isLogout)) {
+            //
+            Claims info = jwtUtil.getUserInfoFromToken(Token);
+            System.out.println("#############info############" + info);
+            setAuthentication(info.getSubject());
+        }
     }
-
 }

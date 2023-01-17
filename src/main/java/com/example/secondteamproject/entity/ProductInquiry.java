@@ -1,5 +1,6 @@
 package com.example.secondteamproject.entity;
 
+import com.example.secondteamproject.userpackage.requestDTO.UserRequestFormDTO;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -14,7 +15,12 @@ public class ProductInquiry extends Timestamped {
     @Column(name = "PRODUCTINQUIRY_ID")
     private Long id;
 
+    private String title;
     private String content;
+
+    private String email;
+
+    @Enumerated(value = EnumType.STRING)
     private StatusEnum statusEnum;
 
     @ManyToOne
@@ -26,4 +32,14 @@ public class ProductInquiry extends Timestamped {
     @ManyToOne
     @JoinColumn(name = "ITEM_ID")
     private Item itemId;
+
+    public ProductInquiry(UserRequestFormDTO userRequestFormDTO,User userId, Item itemId) {
+        this.title = userRequestFormDTO.getTitle();
+        this.content = userRequestFormDTO.getContent();
+        this.statusEnum = StatusEnum.WAITING;
+        this.userId =userId;
+        this.email = userId.getEmail();
+        this.itemId = itemId;
+        this.sellerId = itemId.getSeller();
+    }
 }
