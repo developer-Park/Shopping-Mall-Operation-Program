@@ -31,4 +31,15 @@ public class SellerRequest  extends Timestamped{
         this.content = sellerRequestDTO.getContent();
         this.title = sellerRequestDTO.getTitle();
     }
+
+    //완료인지 상태확인 추가함
+    public boolean isStatusCompleted() {
+        return this.statusEnum.equals(StatusEnum.COMPLETED);
+    }
+
+    //완료로 상태업데이트 추가함
+    public void updateStatusCompleted() {
+        this.statusEnum = StatusEnum.COMPLETED;
+    }
+
 }
