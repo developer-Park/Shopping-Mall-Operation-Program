@@ -34,6 +34,7 @@ public class User extends Timestamped{
 
     private String email;
 
+
     //파라미터에 email 추가
     public User(String username, String password, UserRoleEnum role, String img, String nickname, String email) {
         this.username = username;
@@ -56,4 +57,5 @@ public class User extends Timestamped{
     public void update(UpdateUserRequestDTO updateUserRequestDTO){
         this.nickname = updateUserRequestDTO.getNickname();
     }
+
 }

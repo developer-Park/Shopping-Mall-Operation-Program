@@ -31,6 +31,7 @@ public class Seller extends Timestamped {
 
     private String email;
 
+
     //파라미터에서 long id 삭제, description 추가
     public Seller(String sellerName, String password, String img, String nickname, String email, String description) {
         this.sellerName = sellerName;
@@ -41,5 +42,6 @@ public class Seller extends Timestamped {
         this.email = email;
         this.description = description;
     }
+
 
 }

@@ -71,7 +71,7 @@ public class WebSecurityConfig {
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
         http.authorizeHttpRequests()
                 .antMatchers("/users/**").hasAnyRole("USER","ADMIN")
-                .antMatchers("/admins/**").permitAll()
+                .antMatchers("/admin/**").permitAll()
                 .antMatchers("/general/**").permitAll()
                 .antMatchers("/categories/**").hasRole("ADMIN")
                 //Swagger set up
