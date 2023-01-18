@@ -33,12 +33,15 @@ public class User extends Timestamped{
     private String nickname;
 
     private String email;
-    public User(String username, String password, UserRoleEnum role, String img, String nickname) {
+
+    //파라미터에 email 추가
+    public User(String username, String password, UserRoleEnum role, String img, String nickname, String email) {
         this.username = username;
         this.password = password;
         this.role = role;
         this.nickname=nickname;
         this.img=img;
+        this.email=email;
     }
 
     /**

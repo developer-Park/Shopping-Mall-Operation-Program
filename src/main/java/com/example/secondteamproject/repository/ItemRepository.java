@@ -8,10 +8,9 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
-
+//findAllDesc 삭제
 @Repository
 public interface ItemRepository extends JpaRepository<Item, Long> {
     List<Item> findAllByOrderByModifiedAtDesc();
 
-    ScanIterator<Object> findAllDesc();
 }

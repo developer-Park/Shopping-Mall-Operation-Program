@@ -34,6 +34,7 @@ public class GeneralServiceImpl implements GeneralService {
 
     private final RedisTemplate redisTemplate;
 
+    //User 생성시 email 아규먼트 추가함
     @Transactional
     public void signup(SignupRequestDto signupRequestDto) {
 
@@ -60,7 +61,7 @@ public class GeneralServiceImpl implements GeneralService {
             adminRepository.save(createAdmin);
 
         } else {
-            User user = new User(name, password, role, signupRequestDto.getImg(), signupRequestDto.getNickname());
+            User user = new User(name, password, role, signupRequestDto.getImg(), signupRequestDto.getNickname(), signupRequestDto.getEmail());
             userRepository.save(user);
 
         }
