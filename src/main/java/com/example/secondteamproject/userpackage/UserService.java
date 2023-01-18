@@ -1,9 +1,11 @@
 package com.example.secondteamproject.userpackage;
 
+import com.example.secondteamproject.security.UserDetailsImpl;
 import com.example.secondteamproject.userpackage.requestDTO.SellerRequestDTO;
 import com.example.secondteamproject.userpackage.requestDTO.UpdateUserRequestDTO;
 import com.example.secondteamproject.userpackage.requestDTO.UserRequestFormDTO;
 import com.example.secondteamproject.userpackage.responseDTO.*;
+import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 
@@ -16,9 +18,9 @@ public interface UserService {
 
     void updateUserNickName(UpdateUserRequestDTO requestDto, Long id);
 
-    List<AllSellerListResponseDTO> getAllSellerList();
+    List<SellerResponseDTO> getAllSellerList(UserDetailsImpl userDetails, Pageable pageable);
 
-    List<AllItemListResponseDTO> getAllItemList();
+    List<ItemResponseDTO> getAllItemList(UserDetailsImpl userDetails, Pageable pageable);
 
-    OneSellerResponseDTO getOneSeller(Long sellerid);
+    SellerResponseDTO getOneSeller(Long sellerid);
 }
