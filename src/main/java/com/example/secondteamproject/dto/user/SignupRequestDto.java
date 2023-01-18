@@ -4,10 +4,12 @@ package com.example.secondteamproject.dto.user;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
+//email 변수 추가
 @Getter
 @NoArgsConstructor
 public class SignupRequestDto {
@@ -23,6 +25,10 @@ public class SignupRequestDto {
     private String img;
 
     private String nickname;
+
+    @NotEmpty(message = "이메일은 필수 입력값입니다.")
+    @Email
+    private String email;
 
     private boolean admin = false;
     private String adminToken = "";

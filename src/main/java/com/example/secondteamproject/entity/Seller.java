@@ -31,13 +31,15 @@ public class Seller extends Timestamped {
 
     private String email;
 
-    public Seller(Long id, String sellerName, String password, UserRoleEnum role, String img,String nickname) {
-        this.id = id;
+    //파라미터에서 long id 삭제, description 추가
+    public Seller(String sellerName, String password, String img, String nickname, String email, String description) {
         this.sellerName = sellerName;
         this.password = password;
-        this.role = role;
+        this.role = UserRoleEnum.SELLER;
         this.img = img;
-        this.nickname=nickname;
+        this.nickname = nickname;
+        this.email = email;
+        this.description = description;
     }
 
 }
