@@ -13,5 +13,5 @@ import java.util.List;
 public interface ItemRepository extends JpaRepository<Item, Long> {
     List<Item> findAllByOrderByModifiedAtDesc();
 
-    ScanIterator<Object> findAllDesc();
+    // ScanIterator<Object> findAllDesc();
 }
