@@ -1,5 +1,6 @@
 package com.example.secondteamproject.entity;
 
+import com.example.secondteamproject.userpackage.requestDTO.UpdateUserRequestDTO;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -8,7 +9,7 @@ import javax.persistence.*;
 
 @Getter
 @NoArgsConstructor
-@Entity(name = "customers")
+@Entity(name = "users")
 public class User extends Timestamped{
 
     @Id
@@ -32,12 +33,15 @@ public class User extends Timestamped{
     private String nickname;
 
     private String email;
-    public User(String username, String password, UserRoleEnum role, String img, String nickname) {
+
+    //파라미터에 email 추가
+    public User(String username, String password, UserRoleEnum role, String img, String nickname, String email) {
         this.username = username;
         this.password = password;
         this.role = role;
         this.nickname=nickname;
         this.img=img;
+        this.email=email;
     }
 
     /**
@@ -49,5 +53,7 @@ public class User extends Timestamped{
     public boolean isWriter(String username) {
         return getUsername().equals(username);
     }
-
+    public void update(UpdateUserRequestDTO updateUserRequestDTO){
+        this.nickname = updateUserRequestDTO.getNickname();
+    }
 }

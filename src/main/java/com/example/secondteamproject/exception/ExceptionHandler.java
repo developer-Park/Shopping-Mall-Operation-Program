@@ -26,4 +26,5 @@ public class ExceptionHandler {
         return new ResponseEntity(restApiException, HttpStatus.BAD_REQUEST);
     }
 
+
 }

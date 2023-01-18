@@ -8,13 +8,19 @@ import com.example.secondteamproject.entity.Admin;
 import com.example.secondteamproject.entity.User;
 import com.example.secondteamproject.entity.UserRoleEnum;
 import com.example.secondteamproject.jwt.JwtUtil;
+import com.example.secondteamproject.dto.user.LogOutRequestDTO;
 import com.example.secondteamproject.repository.AdminRepository;
 import com.example.secondteamproject.repository.UserRepository;
 import com.example.secondteamproject.service.GeneralService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.ObjectUtils;
+
+import java.util.concurrent.TimeUnit;
 
 @Service
 @RequiredArgsConstructor
@@ -26,7 +32,9 @@ public class GeneralServiceImpl implements GeneralService {
     private static final String ADMIN_TOKEN = "AAABnvxRVklrnYxKZ0aHgTBcXukeZygoC";
     private final AdminRepository adminRepository;
 
+    private final RedisTemplate redisTemplate;
 
+    //User 생성시 email 아규먼트 추가함
     @Transactional
     public void signup(SignupRequestDto signupRequestDto) {
 
@@ -38,12 +46,10 @@ public class GeneralServiceImpl implements GeneralService {
         if (foundUser != null) {
             throw new IllegalArgumentException("Duplicated user");
         }
-
         Admin admin = adminRepository.findByAdminName(name);
         if (admin != null) {
             throw new IllegalArgumentException("Duplicated admin user");
         }
-
         UserRoleEnum role = UserRoleEnum.USER;
         // 사용자 role 확인
         if (signupRequestDto.isAdmin()) {
@@ -55,7 +61,7 @@ public class GeneralServiceImpl implements GeneralService {
             adminRepository.save(createAdmin);
 
         } else {
-            User user = new User(name, password, role, signupRequestDto.getImg(), signupRequestDto.getNickname());
+            User user = new User(name, password, role, signupRequestDto.getImg(), signupRequestDto.getNickname(), signupRequestDto.getEmail());
             userRepository.save(user);
 
         }
@@ -75,8 +81,11 @@ public class GeneralServiceImpl implements GeneralService {
 
         // 사용자 확인
         User user = userRepository.findByUsername(username);
+
+        //사용자가 비어있으면 운영자인지 확인
         if (user == null) {
             Admin admin = adminRepository.findByAdminName(username);
+
             if (admin == null) {
                 throw new IllegalArgumentException("Not found admin");
             }
@@ -85,6 +94,22 @@ public class GeneralServiceImpl implements GeneralService {
             }
             String accessToken = jwtUtil.createToken(admin.getAdminName(), admin.getRole());
             String refreshToken1 = jwtUtil.refreshToken(admin.getAdminName(), admin.getRole());
+
+            System.out.println("################액세스토큰##############" + accessToken);
+            System.out.println("################리프레쉬토큰#############" + accessToken);
+
+            //redis
+            String resolvedFreshToken = jwtUtil.resolveRefreshToken(refreshToken1);
+
+            Long tokenExpiration = jwtUtil.getExpiration(resolvedFreshToken);
+            System.out.println("토큰익스파이어###################" + tokenExpiration);
+            Authentication authentication = jwtUtil.getAuthentication(resolvedFreshToken);
+            System.out.println("#####Authentication###################" + authentication);
+
+            redisTemplate.opsForValue()
+                    .set("RT:" + authentication.getName(), resolvedFreshToken, tokenExpiration, TimeUnit.MILLISECONDS);
+            //
+
             return new TokenResponseDto(accessToken, refreshToken1);
         }
         // 비밀번호 확인
@@ -94,6 +119,18 @@ public class GeneralServiceImpl implements GeneralService {
         String accessToken = jwtUtil.createToken(user.getUsername(), user.getRole());
         String refreshToken1 = jwtUtil.refreshToken(user.getUsername(), user.getRole());
 
+
+        //redis
+        String resolvedFreshToken = jwtUtil.resolveRefreshToken(refreshToken1);
+
+        Long tokenExpiration = jwtUtil.getExpiration(resolvedFreshToken);
+        System.out.println("토큰익스파이어###################" + tokenExpiration);
+        Authentication authentication = jwtUtil.getAuthentication(resolvedFreshToken);
+        System.out.println("#####Authentication###################" + authentication);
+
+        redisTemplate.opsForValue()
+                .set("RT:" + authentication.getName(), resolvedFreshToken, tokenExpiration, TimeUnit.MILLISECONDS);
+        //
         return new TokenResponseDto(accessToken, refreshToken1);
     }
 
@@ -108,6 +145,23 @@ public class GeneralServiceImpl implements GeneralService {
     public TokenResponseDto reissue(String username, UserRoleEnum role) {
         String newCreatedToken = jwtUtil.createToken(username, role);
         String refreshToken1 = jwtUtil.refreshToken(username, role);
+
+        //redis
+
+        String resolvedFreshToken = jwtUtil.resolveRefreshToken(refreshToken1);
+
+        Long tokenExpiration = jwtUtil.getExpiration(resolvedFreshToken);
+        System.out.println("토큰익스파이어###################" + tokenExpiration);
+        Authentication authentication = jwtUtil.getAuthentication(resolvedFreshToken);
+        System.out.println("#####Authentication###################" + authentication);
+        String refreshToken = (String)redisTemplate.opsForValue().get("RT:" + authentication.getName());
+        if(ObjectUtils.isEmpty(refreshToken)) {
+            throw new IllegalArgumentException("Logout account");
+        }
+        redisTemplate.opsForValue()
+                .set("RT:" + authentication.getName(), resolvedFreshToken, tokenExpiration, TimeUnit.MILLISECONDS);
+        //
+
         return new TokenResponseDto(newCreatedToken, refreshToken1);
     }
 
@@ -117,6 +171,19 @@ public class GeneralServiceImpl implements GeneralService {
         User users = userRepository.findById(id).orElseThrow(
                 () -> new IllegalArgumentException("Not found user"));
         if (users.isWriter(user.getUsername()) || UserRoleEnum.ADMIN == user.getRole()) {
+            userRepository.deleteById(id);
+            return true;
+        } else {
+            throw new IllegalArgumentException("Invalid user");
+        }
+    }
+
+    @Transactional
+    public boolean deleteUserByAdmin(Long id, Admin admin) {
+        //포스트 존재 여부 확인
+        User users = userRepository.findById(id).orElseThrow(
+                () -> new IllegalArgumentException("Not found user"));
+        if (UserRoleEnum.ADMIN == admin.getRole()) {
             userRepository.deleteById(id);
             return true;
         } else {
@@ -134,7 +201,33 @@ public class GeneralServiceImpl implements GeneralService {
     }
 
 
+    //redis
+    @Transactional
+    public void logout(LogOutRequestDTO logout) {
+        // 1. Access Token 검증
+        String resolveAccessToken = jwtUtil.resolveAccessToken(logout.getAccessToken());
+        System.out.println("############리졸브토큰##############" + resolveAccessToken);
+        if (!jwtUtil.validateToken(resolveAccessToken)) {
+            throw new IllegalArgumentException("Wrong request");
+        }
 
+        // 2. Access Token 에서 Username 을 가져옵니다.
+        Authentication authentication = jwtUtil.getAuthentication(resolveAccessToken);
+
+        // 3. Redis 에서 해당 User email 로 저장된 Refresh Token 이 있는지 여부를 확인 후 있을 경우 삭제합니다.
+        if (redisTemplate.opsForValue().get("RT:" + authentication.getName()) != null) {
+            // Refresh Token 삭제
+            System.out.println("##############3레디스채크###########"+redisTemplate.delete("RT:" + authentication.getName()));
+            redisTemplate.delete("RT:" + authentication.getName());
+        }
+
+        // 4. 해당 Access Token 유효시간 가지고 와서 BlackList 로 저장하기
+        Long expiration = jwtUtil.getExpiration(resolveAccessToken);
+        System.out.println("##############3레디스채크###########"+ expiration);
+        redisTemplate.opsForValue()
+                .set(resolveAccessToken, "logout", expiration, TimeUnit.MILLISECONDS);
+
+    }
 
 
 }
