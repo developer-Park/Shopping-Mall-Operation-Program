@@ -4,6 +4,7 @@ import com.example.secondteamproject.admin.dto.CustomerListResponseDto;
 import com.example.secondteamproject.admin.dto.SellerListResponseDto;
 import com.example.secondteamproject.admin.dto.SellerRequestListResponseDto;
 import com.example.secondteamproject.admin.dto.SellerRequestResponseDto;
+import com.example.secondteamproject.dto.user.LogOutRequestDTO;
 import com.example.secondteamproject.entity.Seller;
 import com.example.secondteamproject.entity.SellerRequest;
 import com.example.secondteamproject.entity.User;
@@ -12,13 +13,16 @@ import com.example.secondteamproject.repository.SellerRepository;
 import com.example.secondteamproject.repository.SellerRequestRepository;
 import com.example.secondteamproject.repository.UserRepository;
 import com.example.secondteamproject.admin.service.AdminService;
+import com.example.secondteamproject.service.GeneralService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 @Service
 @RequiredArgsConstructor
@@ -27,7 +31,6 @@ public class AdminServiceImpl implements AdminService {
     private final UserRepository userRepository;
     private final SellerRepository sellerRepository;
     private final SellerRequestRepository sellerRequestRepository;
-
     public List<CustomerListResponseDto> getAllCustomer(Pageable pageable) {
         List<CustomerListResponseDto> customerList = new ArrayList<>();
         for (User user : userRepository.findAll(pageable)) {
@@ -81,7 +84,6 @@ public class AdminServiceImpl implements AdminService {
         sellerRepository.save(seller);
         sellerRequestRepository.delete(sellerRequest);
         userRepository.delete(user);
-
     }
 
     @Transactional

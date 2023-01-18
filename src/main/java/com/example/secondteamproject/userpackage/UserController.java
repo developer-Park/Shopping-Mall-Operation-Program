@@ -23,7 +23,7 @@ public class UserController {
 
     private final UserService userService;
 
-    @PostMapping("/{itemId}/forms/")
+    @PostMapping("/{itemId}/forms")
     @ResponseStatus(HttpStatus.CREATED)
     public ResponseEntity<String> createProductInquiryToSeller(@PathVariable Long itemId, @RequestBody UserRequestFormDTO requestDto, @AuthenticationPrincipal UserDetailsImpl userDetails) {
         userService.createRequestFormToSeller(requestDto, userDetails.getUser().getId(), itemId);
@@ -63,6 +63,7 @@ public class UserController {
     public OneSellerResponseDTO getOneSeller(@PathVariable Long sellerId, @AuthenticationPrincipal UserDetailsImpl userDetails) {
         return userService.getOneSeller(sellerId);
     }
+
 }
 
 

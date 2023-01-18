@@ -4,21 +4,31 @@ import com.example.secondteamproject.dto.token.TokenResponseDto;
 import com.example.secondteamproject.dto.user.SigninRequestDto;
 import com.example.secondteamproject.dto.user.SignupRequestDto;
 import com.example.secondteamproject.entity.Admin;
+import com.example.secondteamproject.entity.Seller;
 import com.example.secondteamproject.entity.User;
 import com.example.secondteamproject.entity.UserRoleEnum;
 import com.example.secondteamproject.dto.user.LogOutRequestDTO;
 
 public interface GeneralService {
-    void signup(SignupRequestDto signupRequestDto);
-    TokenResponseDto signin(SigninRequestDto signinRequestDto);
     TokenResponseDto reissue(String username, UserRoleEnum role);
     boolean deleteUser(Long id, User user);
-    User findByUsername(String name);
-    Admin findByAdminname(String name);
-
     //redis
     void logout(LogOutRequestDTO logout);
 
     boolean deleteUserByAdmin(Long id, Admin admin);
 
+    public void adminsignup(SignupRequestDto signupRequestDto);
+
+    public void userSignUp(SignupRequestDto signupRequestDto);
+
+    Seller findBySellername(String name);
+    User findByUsername(String name);
+    Admin findByAdminname(String name);
+
+    TokenResponseDto userSignIn(SigninRequestDto signinRequestDto);
+
+    TokenResponseDto adminSignIn(SigninRequestDto signinRequestDto);
+
+    TokenResponseDto sellerSignIn(SigninRequestDto signinRequestDto);
+    TokenResponseDto removeDuplicated(String accessToken,String refreshToken1);
 }

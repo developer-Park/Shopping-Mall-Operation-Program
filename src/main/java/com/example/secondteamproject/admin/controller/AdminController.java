@@ -6,6 +6,7 @@ import com.example.secondteamproject.admin.dto.SellerListResponseDto;
 import com.example.secondteamproject.admin.dto.SellerRequestListResponseDto;
 import com.example.secondteamproject.admin.dto.SellerRequestResponseDto;
 import com.example.secondteamproject.admin.service.AdminService;
+import com.example.secondteamproject.dto.user.LogOutRequestDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -65,7 +66,7 @@ public class AdminController {
     @PostMapping("/seller-requests/{id}")
     public String approveSellerRequest(@PathVariable Long id) {
         adminService.approveSellerRequest(id);
-        return "판매자로 변경되어 요청 목록을 삭제합니다?";
+        return "판매자 승인이 완료되었습니다.";
     }
 
     //판매자 1개 권한 삭제. 판매자DB에서 삭제 및 유저DB에 저장
