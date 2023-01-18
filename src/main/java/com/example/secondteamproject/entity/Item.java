@@ -1,5 +1,6 @@
 package com.example.secondteamproject.entity;
 
+import com.example.secondteamproject.dto.item.ItemRequestDto;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -25,5 +26,11 @@ public class Item extends Timestamped {
     @JoinColumn(name = "CATEGORY_ID")
     private Category itemCategory;
 
+    public Item(ItemRequestDto itemRequestDto){
+        this.itemName =itemRequestDto.getItemName();
+        this.seller =itemRequestDto.getSeller();
+        this.price =itemRequestDto.getPrice();
+        this.description = itemRequestDto.getDescription();
+    }
 
 }

@@ -1,5 +1,6 @@
 package com.example.secondteamproject.entity;
 
+import com.example.secondteamproject.dto.seller.SellerRequestDto;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -31,13 +32,20 @@ public class Seller extends Timestamped {
 
     private String email;
 
-    public Seller(Long id, String sellerName, String password, UserRoleEnum role, String img,String nickname) {
+    public Seller(Long id, String sellerName, String password, UserRoleEnum role, String img, String nickname) {
         this.id = id;
         this.sellerName = sellerName;
         this.password = password;
         this.role = role;
         this.img = img;
-        this.nickname=nickname;
+        this.nickname = nickname;
+    }
+
+    public Seller(SellerRequestDto profileDto) {
+        this.nickname = profileDto.getNickname();
+        this.description = profileDto.getDescription();
+        this.img = profileDto.getImg();
+
     }
 
 }
