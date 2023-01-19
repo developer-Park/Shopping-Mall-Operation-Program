@@ -11,6 +11,8 @@ public class AllItemListResponseDTO {
     private int price;
     private String category;
 
+    private Integer point;
+
 
     public AllItemListResponseDTO(Item item) {
         this.itemName = item.getItemName();
@@ -18,5 +20,6 @@ public class AllItemListResponseDTO {
         this.sellerName = item.getSeller().getSellerName();
         this.price = item.getPrice();
         this.category = item.getItemCategory().getName();
+        this.point= item.getPoint();
     }
 }

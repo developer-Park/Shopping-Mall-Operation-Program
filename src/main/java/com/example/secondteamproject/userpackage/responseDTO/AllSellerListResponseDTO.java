@@ -14,6 +14,8 @@ public class AllSellerListResponseDTO {
     private LocalDateTime modifiedAt;
     private LocalDateTime createdAt;
 
+    private Integer point;
+
     public AllSellerListResponseDTO(Seller seller) {
         this.sellerName = seller.getSellerName();
         this.description = seller.getDescription();
@@ -21,5 +23,6 @@ public class AllSellerListResponseDTO {
         this.sellerNickName = seller.getNickname();
         this.createdAt = seller.getCreatedAt();
         this.modifiedAt = seller.getModifiedAt();
+        this.point= seller.getPoint();
     }
 }

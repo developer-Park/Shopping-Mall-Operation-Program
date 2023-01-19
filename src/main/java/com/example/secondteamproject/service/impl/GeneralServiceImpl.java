@@ -80,7 +80,7 @@ public class GeneralServiceImpl implements GeneralService {
                 throw new IllegalArgumentException("Wrong admin password");
             }
             UserRoleEnum role = UserRoleEnum.ADMIN;
-            Admin createAdmin = new Admin(name, password, role, signupRequestDto.getImg());
+            Admin createAdmin = new Admin(name, password, role, signupRequestDto.getImg(), signupRequestDto.getEmail());
             adminRepository.save(createAdmin);
         }
     }

@@ -34,6 +34,8 @@ public class User extends Timestamped{
 
     private String email;
 
+    private Integer point = 10000;
+
 
     //파라미터에 email 추가
     public User(String username, String password, UserRoleEnum role, String img, String nickname, String email) {
@@ -56,6 +58,10 @@ public class User extends Timestamped{
     }
     public void update(UpdateUserRequestDTO updateUserRequestDTO){
         this.nickname = updateUserRequestDTO.getNickname();
+    }
+
+    public void updatePoint(Integer point){
+        this.point = point;
     }
 
 }
