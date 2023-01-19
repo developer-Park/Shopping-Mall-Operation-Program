@@ -4,6 +4,7 @@ import com.example.secondteamproject.admin.dto.CustomerListResponseDto;
 import com.example.secondteamproject.admin.dto.SellerListResponseDto;
 import com.example.secondteamproject.admin.dto.SellerRequestListResponseDto;
 import com.example.secondteamproject.admin.dto.SellerRequestResponseDto;
+import com.example.secondteamproject.dto.user.LogOutRequestDTO;
 import org.springframework.data.domain.Pageable;
 
 import java.util.List;

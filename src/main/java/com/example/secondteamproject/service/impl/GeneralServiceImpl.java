@@ -5,11 +5,13 @@ import com.example.secondteamproject.dto.token.TokenResponseDto;
 import com.example.secondteamproject.dto.user.SigninRequestDto;
 import com.example.secondteamproject.dto.user.SignupRequestDto;
 import com.example.secondteamproject.entity.Admin;
+import com.example.secondteamproject.entity.Seller;
 import com.example.secondteamproject.entity.User;
 import com.example.secondteamproject.entity.UserRoleEnum;
 import com.example.secondteamproject.jwt.JwtUtil;
 import com.example.secondteamproject.dto.user.LogOutRequestDTO;
 import com.example.secondteamproject.repository.AdminRepository;
+import com.example.secondteamproject.repository.SellerRepository;
 import com.example.secondteamproject.repository.UserRepository;
 import com.example.secondteamproject.service.GeneralService;
 import lombok.RequiredArgsConstructor;
@@ -26,46 +28,61 @@ import java.util.concurrent.TimeUnit;
 @RequiredArgsConstructor
 public class GeneralServiceImpl implements GeneralService {
 
+    private final SellerRepository sellerRepository;
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final JwtUtil jwtUtil;
     private static final String ADMIN_TOKEN = "AAABnvxRVklrnYxKZ0aHgTBcXukeZygoC";
     private final AdminRepository adminRepository;
-
     private final RedisTemplate redisTemplate;
-
-    //User 생성시 email 아규먼트 추가함
     @Transactional
-    public void signup(SignupRequestDto signupRequestDto) {
-
+    public void userSignUp(SignupRequestDto signupRequestDto) {
         String name = signupRequestDto.getUsername();
         String password = passwordEncoder.encode(signupRequestDto.getPassword());
-
         //회원 중복 확인
         User foundUser = userRepository.findByUsername(name);
         if (foundUser != null) {
             throw new IllegalArgumentException("Duplicated user");
         }
+        Seller sellerFound = sellerRepository.findBySellerName(name);
+        if (sellerFound != null) {
+            throw new IllegalArgumentException("Duplicated Id");
+        }
+        Admin adminFound = adminRepository.findByAdminName(name);
+        if (adminFound != null) {
+            throw new IllegalArgumentException("Duplicated name");
+        }
+
+        UserRoleEnum role = UserRoleEnum.USER;
+        User user = new User(name, password, role, signupRequestDto.getImg(), signupRequestDto.getNickname(), signupRequestDto.getEmail());
+        userRepository.save(user);
+
+    }
+
+    public void adminsignup(SignupRequestDto signupRequestDto) {
+        String name = signupRequestDto.getUsername();
+        String password = passwordEncoder.encode(signupRequestDto.getPassword());
         Admin admin = adminRepository.findByAdminName(name);
         if (admin != null) {
-            throw new IllegalArgumentException("Duplicated admin user");
+            throw new IllegalArgumentException("Duplicated admin");
         }
-        UserRoleEnum role = UserRoleEnum.USER;
-        // 사용자 role 확인
+        //회원 중복 확인
+        User foundUser = userRepository.findByUsername(name);
+        if (foundUser != null) {
+            throw new IllegalArgumentException("Duplicated user");
+        }
+        Seller sellerFound = sellerRepository.findBySellerName(name);
+        if (sellerFound != null) {
+            throw new IllegalArgumentException("Duplicated Id");
+        }
         if (signupRequestDto.isAdmin()) {
             if (!signupRequestDto.getAdminToken().equals(ADMIN_TOKEN)) {
                 throw new IllegalArgumentException("Wrong admin password");
             }
-            role = UserRoleEnum.ADMIN;
+            UserRoleEnum role = UserRoleEnum.ADMIN;
             Admin createAdmin = new Admin(name, password, role, signupRequestDto.getImg());
             adminRepository.save(createAdmin);
-
-        } else {
-            User user = new User(name, password, role, signupRequestDto.getImg(), signupRequestDto.getNickname(), signupRequestDto.getEmail());
-            userRepository.save(user);
-
         }
-
     }
 
     /**
@@ -75,63 +92,53 @@ public class GeneralServiceImpl implements GeneralService {
      * @return AccessToken, Refresh Token
      */
     @Transactional(readOnly = true)
-    public TokenResponseDto signin(SigninRequestDto signinRequestDto) {
+    public TokenResponseDto userSignIn(SigninRequestDto signinRequestDto) {
         String username = signinRequestDto.getUsername();
         String password = signinRequestDto.getPassword();
-
-        // 사용자 확인
         User user = userRepository.findByUsername(username);
-
-        //사용자가 비어있으면 운영자인지 확인
         if (user == null) {
-            Admin admin = adminRepository.findByAdminName(username);
-
-            if (admin == null) {
-                throw new IllegalArgumentException("Not found admin");
-            }
-            if (!passwordEncoder.matches(password, admin.getPassword())) {
-                throw new IllegalArgumentException("Wrong password");
-            }
-            String accessToken = jwtUtil.createToken(admin.getAdminName(), admin.getRole());
-            String refreshToken1 = jwtUtil.refreshToken(admin.getAdminName(), admin.getRole());
-
-            System.out.println("################액세스토큰##############" + accessToken);
-            System.out.println("################리프레쉬토큰#############" + accessToken);
-
-            //redis
-            String resolvedFreshToken = jwtUtil.resolveRefreshToken(refreshToken1);
-
-            Long tokenExpiration = jwtUtil.getExpiration(resolvedFreshToken);
-            System.out.println("토큰익스파이어###################" + tokenExpiration);
-            Authentication authentication = jwtUtil.getAuthentication(resolvedFreshToken);
-            System.out.println("#####Authentication###################" + authentication);
-
-            redisTemplate.opsForValue()
-                    .set("RT:" + authentication.getName(), resolvedFreshToken, tokenExpiration, TimeUnit.MILLISECONDS);
-            //
-
-            return new TokenResponseDto(accessToken, refreshToken1);
+            throw new IllegalArgumentException("Not found user");
         }
-        // 비밀번호 확인
         if (!passwordEncoder.matches(password, user.getPassword())) {
             throw new IllegalArgumentException("Wrong password");
         }
         String accessToken = jwtUtil.createToken(user.getUsername(), user.getRole());
         String refreshToken1 = jwtUtil.refreshToken(user.getUsername(), user.getRole());
+        TokenResponseDto tokenResponseDto = removeDuplicated(accessToken,refreshToken1);
+        return tokenResponseDto;
+    }
 
-
-        //redis
-        String resolvedFreshToken = jwtUtil.resolveRefreshToken(refreshToken1);
-
-        Long tokenExpiration = jwtUtil.getExpiration(resolvedFreshToken);
-        System.out.println("토큰익스파이어###################" + tokenExpiration);
-        Authentication authentication = jwtUtil.getAuthentication(resolvedFreshToken);
-        System.out.println("#####Authentication###################" + authentication);
-
-        redisTemplate.opsForValue()
-                .set("RT:" + authentication.getName(), resolvedFreshToken, tokenExpiration, TimeUnit.MILLISECONDS);
-        //
-        return new TokenResponseDto(accessToken, refreshToken1);
+    @Transactional(readOnly = true)
+    public TokenResponseDto adminSignIn(SigninRequestDto signinRequestDto) {
+        String username = signinRequestDto.getUsername();
+        String password = signinRequestDto.getPassword();
+        Admin admin = adminRepository.findByAdminName(username);
+        if (admin == null) {
+            throw new IllegalArgumentException("Not found admin");
+        }
+        if (!passwordEncoder.matches(password, admin.getPassword())) {
+            throw new IllegalArgumentException("Wrong password");
+        }
+        String accessToken = jwtUtil.createToken(admin.getAdminName(), admin.getRole());
+        String refreshToken1 = jwtUtil.refreshToken(admin.getAdminName(), admin.getRole());
+        TokenResponseDto tokenResponseDto = removeDuplicated(accessToken,refreshToken1);
+        return tokenResponseDto;
+    }
+    @Transactional(readOnly = true)
+    public TokenResponseDto sellerSignIn(SigninRequestDto signinRequestDto) {
+        String username = signinRequestDto.getUsername();
+        String password = signinRequestDto.getPassword();
+        Seller seller = sellerRepository.findBySellerName(username);
+        if (seller == null) {
+            throw new IllegalArgumentException("Not found seller");
+        }
+        if (!passwordEncoder.matches(password, seller.getPassword())) {
+            throw new IllegalArgumentException("Wrong password");
+        }
+        String accessToken = jwtUtil.createToken(seller.getSellerName(), seller.getRole());
+        String refreshToken1 = jwtUtil.refreshToken(seller.getSellerName(), seller.getRole());
+        TokenResponseDto tokenResponseDto = removeDuplicated(accessToken,refreshToken1);
+        return tokenResponseDto;
     }
 
 
@@ -145,23 +152,17 @@ public class GeneralServiceImpl implements GeneralService {
     public TokenResponseDto reissue(String username, UserRoleEnum role) {
         String newCreatedToken = jwtUtil.createToken(username, role);
         String refreshToken1 = jwtUtil.refreshToken(username, role);
-
         //redis
-
         String resolvedFreshToken = jwtUtil.resolveRefreshToken(refreshToken1);
-
         Long tokenExpiration = jwtUtil.getExpiration(resolvedFreshToken);
-        System.out.println("토큰익스파이어###################" + tokenExpiration);
         Authentication authentication = jwtUtil.getAuthentication(resolvedFreshToken);
-        System.out.println("#####Authentication###################" + authentication);
-        String refreshToken = (String)redisTemplate.opsForValue().get("RT:" + authentication.getName());
-        if(ObjectUtils.isEmpty(refreshToken)) {
+        String refreshToken = (String) redisTemplate.opsForValue().get("RT:" + authentication.getName());
+        if (ObjectUtils.isEmpty(refreshToken)) {
             throw new IllegalArgumentException("Logout account");
         }
         redisTemplate.opsForValue()
                 .set("RT:" + authentication.getName(), resolvedFreshToken, tokenExpiration, TimeUnit.MILLISECONDS);
         //
-
         return new TokenResponseDto(newCreatedToken, refreshToken1);
     }
 
@@ -191,43 +192,41 @@ public class GeneralServiceImpl implements GeneralService {
         }
     }
 
-    ////
-    public User findByUsername(String name) {
-        return userRepository.findByUsername(name);
-    }
-
-    public Admin findByAdminname(String name) {
-        return adminRepository.findByAdminName(name);
-    }
-
-
     //redis
     @Transactional
     public void logout(LogOutRequestDTO logout) {
-        // 1. Access Token 검증
         String resolveAccessToken = jwtUtil.resolveAccessToken(logout.getAccessToken());
-        System.out.println("############리졸브토큰##############" + resolveAccessToken);
         if (!jwtUtil.validateToken(resolveAccessToken)) {
             throw new IllegalArgumentException("Wrong request");
         }
-
-        // 2. Access Token 에서 Username 을 가져옵니다.
         Authentication authentication = jwtUtil.getAuthentication(resolveAccessToken);
-
-        // 3. Redis 에서 해당 User email 로 저장된 Refresh Token 이 있는지 여부를 확인 후 있을 경우 삭제합니다.
+        System.out.println(authentication.getName());
         if (redisTemplate.opsForValue().get("RT:" + authentication.getName()) != null) {
-            // Refresh Token 삭제
-            System.out.println("##############3레디스채크###########"+redisTemplate.delete("RT:" + authentication.getName()));
             redisTemplate.delete("RT:" + authentication.getName());
         }
-
-        // 4. 해당 Access Token 유효시간 가지고 와서 BlackList 로 저장하기
         Long expiration = jwtUtil.getExpiration(resolveAccessToken);
-        System.out.println("##############3레디스채크###########"+ expiration);
         redisTemplate.opsForValue()
                 .set(resolveAccessToken, "logout", expiration, TimeUnit.MILLISECONDS);
-
     }
 
-
+    public User findByUsername(String name) {
+        return userRepository.findByUsername(name);
+    }
+    public Admin findByAdminname(String name) {
+        return adminRepository.findByAdminName(name);
+    }
+    public Seller findBySellername(String name) {
+        return sellerRepository.findBySellerName(name);
+    }
+    public TokenResponseDto removeDuplicated(String accessToken, String refreshToken1) {
+        //redis
+        String resolvedFreshToken = jwtUtil.resolveRefreshToken(refreshToken1);
+        Long tokenExpiration = jwtUtil.getExpiration(resolvedFreshToken);
+        Authentication authentication = jwtUtil.getAuthentication(resolvedFreshToken);
+        redisTemplate.opsForValue()
+                .set("RT:" + authentication.getName(), resolvedFreshToken, tokenExpiration, TimeUnit.MILLISECONDS);
+        return new TokenResponseDto(accessToken, refreshToken1);
+    }
 }
+
+

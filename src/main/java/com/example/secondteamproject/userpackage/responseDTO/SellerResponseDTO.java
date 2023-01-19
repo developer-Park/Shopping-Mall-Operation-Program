@@ -1,12 +1,13 @@
 package com.example.secondteamproject.userpackage.responseDTO;
 
+
 import com.example.secondteamproject.seller.entity.Seller;
 import lombok.Getter;
 
 import java.time.LocalDateTime;
 
 @Getter
-public class AllSellerListResponseDTO {
+public class SellerResponseDTO {
     private String sellerName;
     private String description;
     private String email;
@@ -14,7 +15,7 @@ public class AllSellerListResponseDTO {
     private LocalDateTime modifiedAt;
     private LocalDateTime createdAt;
 
-    public AllSellerListResponseDTO(Seller seller) {
+    public SellerResponseDTO(Seller seller) {
         this.sellerName = seller.getSellerName();
         this.description = seller.getDescription();
         this.email = seller.getEmail();

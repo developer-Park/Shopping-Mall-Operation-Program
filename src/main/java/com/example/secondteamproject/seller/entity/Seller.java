@@ -1,8 +1,5 @@
-package com.example.secondteamproject.seller.entity;
+package com.example.secondteamproject.entity;
 
-import com.example.secondteamproject.entity.Timestamped;
-import com.example.secondteamproject.entity.UserRoleEnum;
-import com.example.secondteamproject.seller.Dto.seller.SellerRequestDto;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -34,6 +31,7 @@ public class Seller extends Timestamped {
 
     private String email;
 
+
     //파라미터에서 long id 삭제, description 추가
     public Seller(String sellerName, String password, String img, String nickname, String email, String description) {
         this.sellerName = sellerName;
@@ -45,14 +43,5 @@ public class Seller extends Timestamped {
         this.description = description;
     }
 
-    public Seller(SellerRequestDto profileDto) {
-        this.nickname = profileDto.getNickname();
-        this.description = profileDto.getDescription();
-        this.img = profileDto.getImg();
-    }
-    public void update(SellerRequestDto sellerRequestDto){
-        this.nickname = sellerRequestDto.getNickname();
-        this.description =sellerRequestDto.getDescription();
-        this.img = sellerRequestDto.getImg();
-    }
+
 }

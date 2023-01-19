@@ -73,7 +73,6 @@ public class JwtAuthFilter extends OncePerRequestFilter {
 
     public void validCheckAndGetUserinfoAndSetAuthentication(String Token, HttpServletResponse response) {
         if (!jwtUtil.validateToken(Token)) {
-            System.out.println("JWTAUTHFILTER73 : " + Token);
             jwtExceptionHandler(response, "Logout account relogin please", 404);
             return;
         }

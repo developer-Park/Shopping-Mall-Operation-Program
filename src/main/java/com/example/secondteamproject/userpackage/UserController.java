@@ -4,11 +4,12 @@ import com.example.secondteamproject.security.UserDetailsImpl;
 import com.example.secondteamproject.userpackage.requestDTO.SellerRequestDTO;
 import com.example.secondteamproject.userpackage.requestDTO.UpdateUserRequestDTO;
 import com.example.secondteamproject.userpackage.requestDTO.UserRequestFormDTO;
-import com.example.secondteamproject.userpackage.responseDTO.AllItemListResponseDTO;
-import com.example.secondteamproject.userpackage.responseDTO.AllSellerListResponseDTO;
-import com.example.secondteamproject.userpackage.responseDTO.OneSellerResponseDTO;
+import com.example.secondteamproject.userpackage.responseDTO.ItemResponseDTO;
+import com.example.secondteamproject.userpackage.responseDTO.SellerResponseDTO;
 import com.example.secondteamproject.userpackage.responseDTO.UserResponseDTO;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -23,7 +24,7 @@ public class UserController {
 
     private final UserService userService;
 
-    @PostMapping("/{itemId}/forms/")
+    @PostMapping("/{itemId}/forms")
     @ResponseStatus(HttpStatus.CREATED)
     public ResponseEntity<String> createProductInquiryToSeller(@PathVariable Long itemId, @RequestBody UserRequestFormDTO requestDto, @AuthenticationPrincipal UserDetailsImpl userDetails) {
         userService.createRequestFormToSeller(requestDto, userDetails.getUser().getId(), itemId);
@@ -49,20 +50,25 @@ public class UserController {
     }
 
 
+    // 판매자 리스트 조회, 10개씩 페이징
     @GetMapping("/seller")
-    public List<AllSellerListResponseDTO> getSellerList(@AuthenticationPrincipal UserDetailsImpl userDetails) {
-        return userService.getAllSellerList();
+    public List<SellerResponseDTO> getSellerList(@AuthenticationPrincipal UserDetailsImpl userDetails,
+                                                 @PageableDefault(size = 10, page = 0) Pageable pageable) {
+        return userService.getAllSellerList(userDetails, pageable);
     }
 
+    // 상품 리스트 조회, 10개씩 페이징
     @GetMapping("/item")
-    public List<AllItemListResponseDTO> getAllItemList(@AuthenticationPrincipal UserDetailsImpl userDetails) {
-        return userService.getAllItemList();
+    public List<ItemResponseDTO> getAllItemList(@AuthenticationPrincipal UserDetailsImpl userDetails,
+                                                @PageableDefault(size = 10, page = 0) Pageable pageable) {
+        return userService.getAllItemList(userDetails, pageable);
     }
 
     @GetMapping("/seller/{sellerId}")
-    public OneSellerResponseDTO getOneSeller(@PathVariable Long sellerId, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+    public SellerResponseDTO getOneSeller(@PathVariable Long sellerId, @AuthenticationPrincipal UserDetailsImpl userDetails) {
         return userService.getOneSeller(sellerId);
     }
+
 }
 
 
