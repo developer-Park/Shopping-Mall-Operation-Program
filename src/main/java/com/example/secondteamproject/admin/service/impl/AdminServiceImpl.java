@@ -4,7 +4,7 @@ import com.example.secondteamproject.admin.dto.CustomerListResponseDto;
 import com.example.secondteamproject.admin.dto.SellerListResponseDto;
 import com.example.secondteamproject.admin.dto.SellerRequestListResponseDto;
 import com.example.secondteamproject.admin.dto.SellerRequestResponseDto;
-import com.example.secondteamproject.entity.Seller;
+import com.example.secondteamproject.seller.entity.Seller;
 import com.example.secondteamproject.entity.SellerRequest;
 import com.example.secondteamproject.entity.User;
 import com.example.secondteamproject.entity.UserRoleEnum;

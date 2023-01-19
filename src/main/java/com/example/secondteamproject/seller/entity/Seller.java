@@ -1,5 +1,8 @@
-package com.example.secondteamproject.entity;
+package com.example.secondteamproject.seller.entity;
 
+import com.example.secondteamproject.entity.Timestamped;
+import com.example.secondteamproject.entity.UserRoleEnum;
+import com.example.secondteamproject.seller.Dto.seller.SellerRequestDto;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -42,4 +45,14 @@ public class Seller extends Timestamped {
         this.description = description;
     }
 
+    public Seller(SellerRequestDto profileDto) {
+        this.nickname = profileDto.getNickname();
+        this.description = profileDto.getDescription();
+        this.img = profileDto.getImg();
+    }
+    public void update(SellerRequestDto sellerRequestDto){
+        this.nickname = sellerRequestDto.getNickname();
+        this.description =sellerRequestDto.getDescription();
+        this.img = sellerRequestDto.getImg();
+    }
 }

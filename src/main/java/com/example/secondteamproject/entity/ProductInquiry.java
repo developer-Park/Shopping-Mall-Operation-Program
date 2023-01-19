@@ -1,5 +1,7 @@
 package com.example.secondteamproject.entity;
 
+import com.example.secondteamproject.seller.entity.Item;
+import com.example.secondteamproject.seller.entity.Seller;
 import com.example.secondteamproject.userpackage.requestDTO.UserRequestFormDTO;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

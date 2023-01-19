@@ -1,28 +1,24 @@
-package com.example.secondteamproject.dto.item;
+package com.example.secondteamproject.seller.Dto.item;
 
-import com.example.secondteamproject.entity.Item;
-import com.example.secondteamproject.entity.Seller;
+//import com.example.secondteamproject.entity.Category;
+import com.example.secondteamproject.seller.entity.Seller;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor
-public class ItemResponseDto {
+public class ItemRequestDto {
+
     private String itemName;
     private Seller seller;
     private int price;
     private String description;
 
 
-    public ItemResponseDto(String itemName, Seller seller, int price, String description) {
+    public ItemRequestDto(String itemName, Seller seller, int price, String description) {
         this.itemName = itemName;
         this.seller = seller;
         this.price = price;
         this.description = description;
-
-    }
-
-    public ItemResponseDto(Item item) {
     }
 }
-

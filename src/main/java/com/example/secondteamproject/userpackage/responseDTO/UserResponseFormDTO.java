@@ -31,4 +31,18 @@ public class UserResponseFormDTO {
         this.modifiedAt = productInquiry.getModifiedAt();
         this.createdAt = productInquiry.getCreatedAt();
     }
+
+//    public UserResponseFormDTO(ProductInquiry questions) {
+//        this.id =questions.getId();
+//        this.title =questions.getTitle();
+//        this.username=questions.getUserId().getUsername();
+//        this.email=questions.getUserId().getEmail();
+//        this.itemName = questions.getItemId().getItemName();
+//        this.contents = questions.getContent();
+//        this.categoryName = questions.getItemId().getItemCategory().getName();
+//        this.modifiedAt = questions.getModifiedAt();
+//        this.createdAt = questions.getCreatedAt();
+//
+//
+//    }
 }

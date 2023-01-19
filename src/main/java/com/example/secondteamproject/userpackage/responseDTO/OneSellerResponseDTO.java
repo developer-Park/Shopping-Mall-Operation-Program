@@ -1,7 +1,7 @@
 package com.example.secondteamproject.userpackage.responseDTO;
 
 
-import com.example.secondteamproject.entity.Seller;
+import com.example.secondteamproject.seller.entity.Seller;
 import lombok.Getter;
 
 import java.time.LocalDateTime;

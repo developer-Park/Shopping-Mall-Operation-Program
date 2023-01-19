@@ -65,7 +65,7 @@ public class AdminController {
     @PostMapping("/seller-requests/{id}")
     public String approveSellerRequest(@PathVariable Long id) {
         adminService.approveSellerRequest(id);
-        return "판매자로 변경되어 요청 목록을 삭제합니다?";
+        return "판매자로 변경되어 요청 목록을 삭제합니다";
     }
 
     //판매자 1개 권한 삭제. 판매자DB에서 삭제 및 유저DB에 저장
