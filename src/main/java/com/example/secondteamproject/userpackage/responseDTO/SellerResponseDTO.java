@@ -7,7 +7,7 @@ import lombok.Getter;
 import java.time.LocalDateTime;
 
 @Getter
-public class OneSellerResponseDTO {
+public class SellerResponseDTO {
     private String sellerName;
     private String description;
     private String email;
@@ -15,7 +15,7 @@ public class OneSellerResponseDTO {
     private LocalDateTime modifiedAt;
     private LocalDateTime createdAt;
 
-    public OneSellerResponseDTO(Seller seller) {
+    public SellerResponseDTO(Seller seller) {
         this.sellerName = seller.getSellerName();
         this.description = seller.getDescription();
         this.email = seller.getEmail();

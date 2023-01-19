@@ -4,7 +4,7 @@ import com.example.secondteamproject.entity.Item;
 import lombok.Getter;
 
 @Getter
-public class AllItemListResponseDTO {
+public class ItemResponseDTO {
     private String itemName;
     private String description;
     private String sellerName;
@@ -12,7 +12,7 @@ public class AllItemListResponseDTO {
     private String category;
 
 
-    public AllItemListResponseDTO(Item item) {
+    public ItemResponseDTO(Item item) {
         this.itemName = item.getItemName();
         this.description = item.getDescription();
         this.sellerName = item.getSeller().getSellerName();
