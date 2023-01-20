@@ -12,6 +12,7 @@ import java.time.LocalDateTime;
 public class SellerRequestListResponseDto {
     Long userId;
     String username;
+    String nickname;
     String title;
     StatusEnum statusEnum;
     LocalDateTime createAt;
@@ -20,6 +21,7 @@ public class SellerRequestListResponseDto {
     public SellerRequestListResponseDto(SellerRequest sellerRequest) {
         this.userId = sellerRequest.getUser().getId();
         this.username = sellerRequest.getUser().getUsername();
+        this.nickname = sellerRequest.getUser().getNickname();
         this.title = sellerRequest.getTitle();
         this.createAt = sellerRequest.getCreatedAt();
         this.statusEnum = sellerRequest.getStatusEnum();

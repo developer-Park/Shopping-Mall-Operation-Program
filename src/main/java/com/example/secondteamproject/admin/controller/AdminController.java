@@ -6,7 +6,6 @@ import com.example.secondteamproject.admin.dto.SellerListResponseDto;
 import com.example.secondteamproject.admin.dto.SellerRequestListResponseDto;
 import com.example.secondteamproject.admin.dto.SellerRequestResponseDto;
 import com.example.secondteamproject.admin.service.AdminService;
-import com.example.secondteamproject.dto.user.LogOutRequestDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -49,8 +48,16 @@ public class AdminController {
         return adminService.getAllSeller(pageable);
     }
 
+    //판매자 조회, 10개씩 페이징
+    //검색 옵션은 "이름", "별명", "이메일"
+    @GetMapping("/sellers/search")
+    public List<SellerListResponseDto> getAllSellersBySearching(@PageableDefault(size = 10, page = 0) Pageable pageable,
+                                                                @RequestParam(value = "option") String option,
+                                                                @RequestParam(value = "keyword") String keyword) {
+        return adminService.getAllSellersBySearching(pageable, option, keyword);
+    }
+
     //판매자 등록 요청폼 목록, 10개씩 페이징, 작성 오랜된 순으로 정렬
-    //승인 안된 것만 보이도록 따로 만들어야하나??
     @GetMapping("/seller-requests")
     public List<SellerRequestListResponseDto> getAllSellerRequests(@PageableDefault(size = 10, page = 0, sort = "createdAt", direction = Sort.Direction.ASC) Pageable pageable) {
         return adminService.getAllSellerRequest(pageable);
