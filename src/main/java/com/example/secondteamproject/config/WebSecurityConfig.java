@@ -45,12 +45,18 @@ public class WebSecurityConfig {
         // h2-console 사용 및 resources 접근 허용 설정
         return (web) -> web.ignoring()
                 .requestMatchers(PathRequest.toH2Console())
-                .requestMatchers(PathRequest.toStaticResources().atCommonLocations());
+                .requestMatchers(PathRequest.toStaticResources().atCommonLocations())
                 //Swagger Ignoring set up.
                 //Writer By Park
 //                .requestMatchers("/v3/api-docs/**", "/configuration/ui",
 //                        "/swagger-resources/**", "/configuration/security",
 //                        "/swagger-ui/**", "/webjars/**", "/swagger/**");
+                .mvcMatchers("/v3/api-docs",
+                                        "/configuration/ui",
+                                        "/swagger-resources",
+                                        "/configuration/security",
+                                        "/swagger-ui.html",
+                                        "/webjars/**","/swagger/**");
     }
 
     /**
@@ -76,6 +82,8 @@ public class WebSecurityConfig {
                 .antMatchers("/categories/**").hasRole("ADMIN")
                 .antMatchers("/seller/**").permitAll()
                 //Swagger set up
+                .antMatchers( "/swagger-ui/**").permitAll()
+                .antMatchers("/swagger-resources/**").permitAll()
                 //Writer By Park
                 .anyRequest().authenticated()
                 .and()

@@ -1,8 +1,6 @@
 package com.example.secondteamproject.point;
 
 import com.example.secondteamproject.security.UserDetailsImpl;
-import com.example.secondteamproject.userpackage.responseDTO.AllItemListResponseDTO;
-import com.example.secondteamproject.userpackage.responseDTO.OneSellerResponseDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
