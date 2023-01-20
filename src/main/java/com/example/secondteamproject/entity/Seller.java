@@ -31,6 +31,8 @@ public class Seller extends Timestamped {
 
     private String email;
 
+    private Integer point;
+
 
     //파라미터에서 long id 삭제, description 추가
     public Seller(String sellerName, String password, String img, String nickname, String email, String description) {
@@ -41,7 +43,11 @@ public class Seller extends Timestamped {
         this.nickname = nickname;
         this.email = email;
         this.description = description;
+        this.point = 10000;
     }
 
+    public void updatePointBySeller(Integer point){
+        this.point = point;
+    }
 
 }

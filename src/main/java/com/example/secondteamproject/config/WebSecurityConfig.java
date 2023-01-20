@@ -74,6 +74,7 @@ public class WebSecurityConfig {
                 .antMatchers("/admin/**").permitAll()
                 .antMatchers("/general/**").permitAll()
                 .antMatchers("/categories/**").hasRole("ADMIN")
+                .antMatchers("/seller/**").permitAll()
                 //Swagger set up
                 //Writer By Park
                 .anyRequest().authenticated()
