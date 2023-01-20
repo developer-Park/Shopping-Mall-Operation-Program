@@ -9,9 +9,10 @@ import java.time.LocalDateTime;
 @Getter
 public class UserResponseDTO {
     private final String nickname;
+    private Integer point;
 
     public UserResponseDTO(User user) {
         this.nickname = user.getNickname();
-
+        this.point = user.getPoint();
     }
 }

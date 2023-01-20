@@ -39,12 +39,12 @@ public class UserController {
     }
 
     @GetMapping("/{userId}")
-    public UserResponseDTO getUserProfile(@PathVariable Long userId, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+    public UserResponseDTO getUserProfile(@PathVariable Long userId) {
         return userService.getOneUser(userId);
     }
 
     @PutMapping("/{userId}")
-    public ResponseEntity<String> updateUserNickName(@PathVariable Long userId, @RequestBody UpdateUserRequestDTO requestDto, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+    public ResponseEntity<String> updateUserNickName(@PathVariable Long userId, @RequestBody UpdateUserRequestDTO requestDto) {
         userService.updateUserNickName(requestDto, userId);
         return new ResponseEntity<>("Success update user nickname ", HttpStatus.CREATED);
     }

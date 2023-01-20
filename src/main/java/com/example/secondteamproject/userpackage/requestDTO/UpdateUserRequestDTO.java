@@ -6,5 +6,6 @@ import lombok.Getter;
 public class UpdateUserRequestDTO {
     private String nickname;
 
+    private Integer point;
 
 }
