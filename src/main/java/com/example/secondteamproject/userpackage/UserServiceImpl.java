@@ -3,6 +3,8 @@ package com.example.secondteamproject.userpackage;
 import com.example.secondteamproject.entity.*;
 import com.example.secondteamproject.repository.*;
 import com.example.secondteamproject.security.UserDetailsImpl;
+import com.example.secondteamproject.seller.entity.Item;
+import com.example.secondteamproject.seller.entity.Seller;
 import com.example.secondteamproject.userpackage.requestDTO.SellerRequestDTO;
 import com.example.secondteamproject.userpackage.requestDTO.UpdateUserRequestDTO;
 import com.example.secondteamproject.userpackage.requestDTO.UserRequestFormDTO;

@@ -1,5 +1,6 @@
 package com.example.secondteamproject.seller.Dto.item;
 
+import com.example.secondteamproject.category.Category;
 import com.example.secondteamproject.seller.entity.Item;
 import com.example.secondteamproject.seller.entity.Seller;
 import lombok.Getter;
@@ -13,9 +14,14 @@ public class ItemResponseDto {
     private String itemName;
     private Seller seller;
     private int price;
+
+    private Category category;
     private String description;
     private LocalDateTime modifiedAt;
     private LocalDateTime createdAt;
+
+    private String sellerName;
+
 
     public ItemResponseDto(String itemName, Seller seller, int price, String description) {
         this.itemName = itemName;
@@ -32,6 +38,7 @@ public class ItemResponseDto {
         this.description = item.getDescription();
         this.modifiedAt =item.getModifiedAt();
         this.createdAt = item.getCreatedAt();
+        this.category = item.getCategory();
     }
 }
 

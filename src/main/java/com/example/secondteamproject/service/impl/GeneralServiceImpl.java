@@ -5,7 +5,7 @@ import com.example.secondteamproject.dto.token.TokenResponseDto;
 import com.example.secondteamproject.dto.user.SigninRequestDto;
 import com.example.secondteamproject.dto.user.SignupRequestDto;
 import com.example.secondteamproject.entity.Admin;
-import com.example.secondteamproject.entity.Seller;
+import com.example.secondteamproject.seller.entity.Seller;
 import com.example.secondteamproject.entity.User;
 import com.example.secondteamproject.entity.UserRoleEnum;
 import com.example.secondteamproject.jwt.JwtUtil;

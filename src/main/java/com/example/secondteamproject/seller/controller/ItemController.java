@@ -20,7 +20,7 @@ public class ItemController {
     private final ItemService itemService;
 
     // 판매상품 등록
-    @Secured("seller")
+//    @Secured("Seller")
     @PostMapping("/seller/items")
     public ResponseEntity<ItemResponseDto> createItem(@RequestBody ItemRequestDto itemRequestDto){
         return ResponseEntity.status(HttpStatus.CREATED).body(itemService.createItem(itemRequestDto));

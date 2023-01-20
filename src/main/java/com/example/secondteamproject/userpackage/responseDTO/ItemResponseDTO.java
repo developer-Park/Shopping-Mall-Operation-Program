@@ -17,6 +17,6 @@ public class ItemResponseDTO {
         this.description = item.getDescription();
         this.sellerName = item.getSeller().getSellerName();
         this.price = item.getPrice();
-        this.category = item.getItemCategory().getName();
+        this.category = item.getCategory().getName();
     }
 }

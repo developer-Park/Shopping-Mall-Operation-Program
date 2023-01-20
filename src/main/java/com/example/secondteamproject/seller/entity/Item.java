@@ -1,6 +1,7 @@
 package com.example.secondteamproject.seller.entity;
 
 import com.example.secondteamproject.category.Category;
+import com.example.secondteamproject.seller.entity.Seller;
 import com.example.secondteamproject.entity.Timestamped;
 import com.example.secondteamproject.seller.Dto.item.ItemRequestDto;
 import lombok.Getter;
@@ -24,15 +25,22 @@ public class Item extends Timestamped {
     private int price;
     private String description;
 
+//    @ManyToOne
+//    @JoinColumn(name ="SELLER_SELLERNAME")
+//    private String sellerName;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "CATEGORY_ID")
-    private Category itemCategory;
+    private Category category;
 
-    public Item(ItemRequestDto itemRequestDto){
+    public Item(ItemRequestDto itemRequestDto,Category category){
         this.itemName =itemRequestDto.getItemName();
-        this.seller =itemRequestDto.getSeller();
+//        this.seller =itemRequestDto.getSeller();
         this.price =itemRequestDto.getPrice();
         this.description = itemRequestDto.getDescription();
+        this.category =category;
+
+//        this.seller =sellerName;
     }
     public  void updateItem(ItemRequestDto itemRequestDto){
         this.itemName =itemRequestDto.getItemName();

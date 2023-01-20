@@ -1,7 +1,7 @@
 package com.example.secondteamproject.security;
 
 import com.example.secondteamproject.entity.Admin;
-import com.example.secondteamproject.entity.Seller;
+import com.example.secondteamproject.seller.entity.Seller;
 import com.example.secondteamproject.entity.User;
 import com.example.secondteamproject.repository.AdminRepository;
 import com.example.secondteamproject.repository.SellerRepository;

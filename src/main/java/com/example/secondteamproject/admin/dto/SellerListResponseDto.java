@@ -1,6 +1,6 @@
 package com.example.secondteamproject.admin.dto;
 
-import com.example.secondteamproject.entity.Seller;
+import com.example.secondteamproject.seller.entity.Seller;
 import com.example.secondteamproject.entity.User;
 import lombok.Getter;
 

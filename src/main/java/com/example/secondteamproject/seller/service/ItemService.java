@@ -1,5 +1,8 @@
 package com.example.secondteamproject.seller.service;
 
+import com.example.secondteamproject.category.Category;
+import com.example.secondteamproject.category.CategoryRepository;
+import com.example.secondteamproject.repository.SellerRepository;
 import com.example.secondteamproject.seller.Dto.item.ItemRequestDto;
 import com.example.secondteamproject.seller.Dto.item.ItemResponseDto;
 import com.example.secondteamproject.repository.ItemRepository;
@@ -20,12 +23,21 @@ public class ItemService {
 
 
     private final ItemRepository itemRepository;
+    private final CategoryRepository categoryRepository;
+
+    private final SellerRepository sellerRepository;
 
 
     //판매상품 등록
     @Transactional
-    public ItemResponseDto createItem(ItemRequestDto itemRequestDto  ){
-        Item item = new Item(itemRequestDto);
+    public ItemResponseDto createItem(ItemRequestDto itemRequestDto){
+        Category category = categoryRepository.findById(itemRequestDto.getCategoryId()).orElseThrow(
+                ()-> new IllegalArgumentException("생성하고자 하는 아이템의 카테고리가 없습니다.")
+        );
+//        Seller seller = sellerRepository.findById(itemRequestDto.getSellerId()).orElseThrow(
+//                ()-> new IllegalArgumentException("해당 판매자가 없습니다.")
+//        );
+        Item item = new Item(itemRequestDto,category);
         itemRepository.saveAndFlush(item);
         return new ItemResponseDto(item);
     }

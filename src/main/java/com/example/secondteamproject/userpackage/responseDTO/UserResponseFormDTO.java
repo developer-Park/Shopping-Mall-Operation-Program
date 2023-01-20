@@ -27,7 +27,7 @@ public class UserResponseFormDTO {
         this.email = productInquiry.getUserId().getEmail();
         this.itemName = productInquiry.getItemId().getItemName();
         this.contents = productInquiry.getContent();
-        this.categoryName = productInquiry.getItemId().getItemCategory().getName();
+        this.categoryName = productInquiry.getItemId().getCategory().getName();
         this.modifiedAt = productInquiry.getModifiedAt();
         this.createdAt = productInquiry.getCreatedAt();
     }
