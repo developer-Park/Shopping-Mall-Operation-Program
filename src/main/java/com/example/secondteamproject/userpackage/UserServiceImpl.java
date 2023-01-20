@@ -2,11 +2,14 @@ package com.example.secondteamproject.userpackage;
 
 import com.example.secondteamproject.entity.*;
 import com.example.secondteamproject.repository.*;
+import com.example.secondteamproject.security.UserDetailsImpl;
 import com.example.secondteamproject.userpackage.requestDTO.SellerRequestDTO;
 import com.example.secondteamproject.userpackage.requestDTO.UpdateUserRequestDTO;
 import com.example.secondteamproject.userpackage.requestDTO.UserRequestFormDTO;
 import com.example.secondteamproject.userpackage.responseDTO.*;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -67,26 +70,32 @@ public class UserServiceImpl implements UserService {
         user.update(requestDto);
     }
 
+    // 판매자 리스트 조회, 10개씩 페이징
     @Transactional(readOnly = true)
-    public List<AllSellerListResponseDTO> getAllSellerList() {
-        List<Seller> sellers = sellerRepository.findAllByOrderByModifiedAtDesc();
-        List<AllSellerListResponseDTO> allSellerListResponseDTO = new ArrayList<>();
-        for (Seller seller : sellers){
-            allSellerListResponseDTO.add(new AllSellerListResponseDTO(seller));
-        }
-        return allSellerListResponseDTO;
+    public List<SellerResponseDTO> getAllSellerList(UserDetailsImpl userDetails, Pageable pageable) {
+        Page<Seller> sellers = sellerRepository.findAll(pageable);
+        return sellers
+                .stream()
+                .map(SellerResponseDTO::new)
+                .collect(Collectors.toList());
     }
 
+    // 상품 리스트 조회, 10개씩 페이징
     @Transactional(readOnly = true)
-    public List<AllItemListResponseDTO> getAllItemList() {
-        return itemRepository.findAllByOrderByModifiedAtDesc().stream().map(AllItemListResponseDTO::new).collect(Collectors.toList());
+    public List<ItemResponseDTO> getAllItemList(UserDetailsImpl userDetails, Pageable pageable) {
+        Page<Item> items = itemRepository.findAll(pageable);
+        return items
+                .stream()
+                .map(ItemResponseDTO::new)
+                .collect(Collectors.toList());
     }
 
-    public OneSellerResponseDTO getOneSeller(Long sellerId) {
+
+    public SellerResponseDTO getOneSeller(Long sellerId) {
         Seller seller = sellerRepository.findById(sellerId).orElseThrow(
                 () -> new IllegalArgumentException("Not found user")
         );
-        return new OneSellerResponseDTO(seller);
+        return new SellerResponseDTO(seller);
     }
 }
 
