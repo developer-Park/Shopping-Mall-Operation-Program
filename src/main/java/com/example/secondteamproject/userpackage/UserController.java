@@ -38,34 +38,31 @@ public class UserController {
     }
 
     @GetMapping("/{userId}")
-    public UserResponseDTO getUserProfile(@PathVariable Long userId) {
+    public UserResponseDTO getUserProfile(@PathVariable Long userId, @AuthenticationPrincipal UserDetailsImpl userDetails) {
         return userService.getOneUser(userId);
     }
 
     @PutMapping("/{userId}")
-    public ResponseEntity<String> updateUserNickName(@PathVariable Long userId, @RequestBody UpdateUserRequestDTO requestDto) {
+    public ResponseEntity<String> updateUserNickName(@PathVariable Long userId, @RequestBody UpdateUserRequestDTO requestDto, @AuthenticationPrincipal UserDetailsImpl userDetails) {
         userService.updateUserNickName(requestDto, userId);
         return new ResponseEntity<>("Success update user nickname ", HttpStatus.CREATED);
     }
 
 
     @GetMapping("/seller")
-    public List<AllSellerListResponseDTO> getSellerList() {
+    public List<AllSellerListResponseDTO> getSellerList(@AuthenticationPrincipal UserDetailsImpl userDetails) {
         return userService.getAllSellerList();
     }
 
     @GetMapping("/item")
-    public List<AllItemListResponseDTO> getAllItemList() {
+    public List<AllItemListResponseDTO> getAllItemList(@AuthenticationPrincipal UserDetailsImpl userDetails) {
         return userService.getAllItemList();
     }
 
     @GetMapping("/seller/{sellerId}")
-    public OneSellerResponseDTO getOneSeller(@PathVariable Long sellerId ) {
+    public OneSellerResponseDTO getOneSeller(@PathVariable Long sellerId, @AuthenticationPrincipal UserDetailsImpl userDetails) {
         return userService.getOneSeller(sellerId);
     }
-
-
-
 
 }
 

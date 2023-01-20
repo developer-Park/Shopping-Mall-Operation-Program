@@ -1,8 +1,6 @@
 package com.example.secondteamproject.entity;
 
 import com.example.secondteamproject.category.Category;
-import com.example.secondteamproject.category.CategoryRepository;
-import com.example.secondteamproject.seller.ItemRequestDto;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -21,23 +19,12 @@ public class Item extends Timestamped {
     @ManyToOne
     @JoinColumn (name = "SELLER_ID")
     private Seller seller;
-    private Integer price;
+    private int price;
     private String description;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "CATEGORY_ID")
     private Category itemCategory;
-
-    private Integer point;
-
-    public Item(ItemRequestDto itemRequestDto, Category category,Seller seller){
-        this.itemName =itemRequestDto.getItemName();
-        this.seller = seller;
-        this.price =itemRequestDto.getPrice();
-        this.description = itemRequestDto.getDescription();
-        this.point = price / 10 ;
-        this.itemCategory = category;
-    }
 
 
 }

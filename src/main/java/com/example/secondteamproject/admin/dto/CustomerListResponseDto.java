@@ -12,12 +12,10 @@ public class CustomerListResponseDto {
     String nickname;
     String email;
 
-    Integer point;
     public CustomerListResponseDto(User user) {
         this.userId = user.getId();
         this.username = user.getUsername();
         this.nickname = user.getNickname();
         this.email = user.getEmail();
-        this.point = user.getPoint();
     }
 }
