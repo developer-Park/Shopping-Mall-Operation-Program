@@ -4,6 +4,7 @@ import com.example.secondteamproject.admin.dto.CustomerListResponseDto;
 import com.example.secondteamproject.admin.dto.SellerListResponseDto;
 import com.example.secondteamproject.admin.dto.SellerRequestListResponseDto;
 import com.example.secondteamproject.admin.dto.SellerRequestResponseDto;
+import com.example.secondteamproject.admin.service.AdminService;
 import com.example.secondteamproject.entity.Seller;
 import com.example.secondteamproject.entity.SellerRequest;
 import com.example.secondteamproject.entity.User;
@@ -11,7 +12,6 @@ import com.example.secondteamproject.entity.UserRoleEnum;
 import com.example.secondteamproject.repository.SellerRepository;
 import com.example.secondteamproject.repository.SellerRequestRepository;
 import com.example.secondteamproject.repository.UserRepository;
-import com.example.secondteamproject.admin.service.AdminService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -20,6 +20,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -58,8 +59,7 @@ public class AdminServiceImpl implements AdminService {
                 case "이름" -> sellerRepository.findAllBySellerNameContainsIgnoreCase(key);
                 case "별명" -> sellerRepository.findAllByNicknameContainsIgnoreCase(key);
                 case "이메일" -> sellerRepository.findAllByEmailContainsIgnoreCase(key);
-                case "이름별명" ->
-                        sellerRepository.findAllBySellerNameContainsIgnoreCaseOrNicknameContainsIgnoreCase(key, key);
+                case "이름별명" -> sellerRepository.findAllBySellerNameContainsIgnoreCaseOrNicknameContainsIgnoreCase(key, key);
                 default -> sellerRepository.findAll();
             };
             sellerList.addAll(sellerRepoTemp);
@@ -81,7 +81,6 @@ public class AdminServiceImpl implements AdminService {
         return sellerRequestList;
     }
 
-
     public SellerRequestResponseDto getSellerRequest(Long requestId) {
         SellerRequest sellerRequest = sellerRequestRepository.findById(requestId).orElseThrow(
                 () -> new IllegalArgumentException("해당 요청 글이 존재하지 않습니다.")
@@ -96,8 +95,7 @@ public class AdminServiceImpl implements AdminService {
         );
 
         User user = sellerRequest.getUser();
-        String description = sellerRequest.getContent();
-
+        String description = sellerRequest.getContent(
         Seller seller = new Seller(user, description);
         sellerRepository.save(seller);
         sellerRequestRepository.delete(sellerRequest);
