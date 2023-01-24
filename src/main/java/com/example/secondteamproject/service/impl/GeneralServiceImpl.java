@@ -22,6 +22,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.ObjectUtils;
 
+import javax.servlet.http.HttpServletResponse;
 import java.util.concurrent.TimeUnit;
 
 @Service
@@ -54,7 +55,7 @@ public class GeneralServiceImpl implements GeneralService {
         }
 
         UserRoleEnum role = UserRoleEnum.USER;
-        User user = new User(name, password, role, signupRequestDto.getImg(), signupRequestDto.getNickname(), signupRequestDto.getEmail());
+        User user = new User(name, password, role, signupRequestDto.getNickname(), signupRequestDto.getEmail());
         userRepository.save(user);
 
     }
@@ -80,7 +81,7 @@ public class GeneralServiceImpl implements GeneralService {
                 throw new IllegalArgumentException("Wrong admin password");
             }
             UserRoleEnum role = UserRoleEnum.ADMIN;
-            Admin createAdmin = new Admin(name, password, role, signupRequestDto.getImg(), signupRequestDto.getEmail());
+            Admin createAdmin = new Admin(name, password, role, signupRequestDto.getEmail());
             adminRepository.save(createAdmin);
         }
     }
@@ -92,7 +93,7 @@ public class GeneralServiceImpl implements GeneralService {
      * @return AccessToken, Refresh Token
      */
     @Transactional(readOnly = true)
-    public TokenResponseDto userSignIn(SigninRequestDto signinRequestDto) {
+    public TokenResponseDto userSignIn(SigninRequestDto signinRequestDto, HttpServletResponse response) {
         String username = signinRequestDto.getUsername();
         String password = signinRequestDto.getPassword();
         User user = userRepository.findByUsername(username);
@@ -105,6 +106,8 @@ public class GeneralServiceImpl implements GeneralService {
         String accessToken = jwtUtil.createToken(user.getUsername(), user.getRole());
         String refreshToken1 = jwtUtil.refreshToken(user.getUsername(), user.getRole());
         TokenResponseDto tokenResponseDto = removeDuplicated(accessToken,refreshToken1);
+        response.addHeader(JwtUtil.AUTHORIZATION_HEADER, accessToken);
+
         return tokenResponseDto;
     }
 

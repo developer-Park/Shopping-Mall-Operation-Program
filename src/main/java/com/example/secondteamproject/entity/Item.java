@@ -39,5 +39,12 @@ public class Item extends Timestamped {
         this.itemCategory = category;
     }
 
+    public void updateItem(String name,Category category, String description, Integer price) {
+        this.itemName = name;
+        this.price = price;
+        this.itemCategory = category;
+        this.description = description;
+    }
+
 
 }

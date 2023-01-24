@@ -106,12 +106,11 @@ public class AdminServiceImpl implements AdminService {
         User user = sellerRequest.getUser();
         String sellerName = user.getUsername();
         String password = user.getPassword();
-        String img = user.getImg();
         String nickname = user.getNickname();
         String email = user.getEmail();
         String description = sellerRequest.getContent();
 
-        Seller seller = new Seller(sellerName, password, img, nickname, email, description);
+        Seller seller = new Seller(sellerName, password, nickname, email, description);
         sellerRepository.save(seller);
         sellerRequestRepository.delete(sellerRequest);
         userRepository.delete(user);
@@ -126,11 +125,10 @@ public class AdminServiceImpl implements AdminService {
         String username = seller.getSellerName();
         String password = seller.getPassword();
         UserRoleEnum role = UserRoleEnum.USER;
-        String img = seller.getImg();
         String nickname = seller.getNickname();
         String email = seller.getEmail();
 
-        User user = new User(username, password, role, img, nickname, email);
+        User user = new User(username, password, role, nickname, email);
         userRepository.save(user);
 
         sellerRepository.delete(seller);

@@ -9,6 +9,8 @@ import com.example.secondteamproject.entity.User;
 import com.example.secondteamproject.entity.UserRoleEnum;
 import com.example.secondteamproject.dto.user.LogOutRequestDTO;
 
+import javax.servlet.http.HttpServletResponse;
+
 public interface GeneralService {
     TokenResponseDto reissue(String username, UserRoleEnum role);
     boolean deleteUser(Long id, User user);
@@ -25,7 +27,7 @@ public interface GeneralService {
     User findByUsername(String name);
     Admin findByAdminname(String name);
 
-    TokenResponseDto userSignIn(SigninRequestDto signinRequestDto);
+    TokenResponseDto userSignIn(SigninRequestDto signinRequestDto, HttpServletResponse response);
 
     TokenResponseDto adminSignIn(SigninRequestDto signinRequestDto);
 

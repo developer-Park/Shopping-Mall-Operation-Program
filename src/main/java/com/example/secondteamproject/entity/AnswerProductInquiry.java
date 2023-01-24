@@ -13,12 +13,13 @@ public class AnswerProductInquiry extends Timestamped {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "ANSWERPRODUCTINQUIRY_ID")
     private Long id;
-    @ManyToOne
-    @JoinColumn(name = "SELLER_ID")
-    private Seller sellername;
-
+    private String sellername;
     private String contentAnswer;
-    @ManyToOne
-    @JoinColumn(name="PRODUCTINQUIRY_ID")
-    private ProductInquiry inquiryId;
+    private String username;
+
+    public AnswerProductInquiry(String sellername, String contentAnswer, String username) {
+        this.sellername = sellername;
+        this.contentAnswer = contentAnswer;
+        this.username = username;
+    }
 }

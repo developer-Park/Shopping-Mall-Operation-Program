@@ -22,16 +22,14 @@ public class Admin extends Timestamped {
     @Enumerated(value = EnumType.STRING)
     private UserRoleEnum role;
 
-    private String img;
 
     private String email;
 
 
-    public Admin(String adminName, String password, UserRoleEnum role,String img,String email) {
+    public Admin(String adminName, String password, UserRoleEnum role,String email) {
         this.adminName = adminName;
         this.password = password;
         this.role = role;
-        this.img=img;
         this.email = email;
     }
 
