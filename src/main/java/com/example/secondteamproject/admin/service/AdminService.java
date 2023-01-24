@@ -13,10 +13,11 @@ public interface AdminService {
     List<SellerListResponseDto> getAllSeller(Pageable pageable);
     List<SellerListResponseDto> getAllSellersBySearching(Pageable pageable, String option, String keyword);
     List<SellerRequestListResponseDto> getAllSellerRequest(Pageable pageable);
-    List<SellerRequestListResponseDto> getAllSellerRequestBySearching(Pageable pageable, String option, String keyword);
-
     SellerRequestResponseDto getSellerRequest(Long id);
     void approveSellerRequest(Long id);
     void deleteSellerRole(Long id);
+
+
+    void approveAllSellerRequest();
 
 }
