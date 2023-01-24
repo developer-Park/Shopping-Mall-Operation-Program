@@ -19,8 +19,11 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.Errors;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 @RestController
 @RequiredArgsConstructor
@@ -30,21 +33,42 @@ public class GeneralController {
     private final GeneralService generalService;
     private final JwtUtil jwtUtil;
 
-    @PostMapping("/user-signup")
-    public String userSignUp(@Validated @RequestBody SignupRequestDto signupRequestDto) {
+
+
+    @GetMapping("/signup")
+    public ModelAndView signupPage() {
+        return new ModelAndView("signup");
+    }
+    @GetMapping("/signup/admin")
+    public ModelAndView signupAdminPage() {
+        return new ModelAndView("signupAdmin");
+    }
+
+
+    @GetMapping("/login-page")
+    public ModelAndView loginPage() {
+        return new ModelAndView("login");
+    }
+
+
+    @PostMapping(path = "/user-signup", consumes = "application/x-www-form-urlencoded")
+    public String userSignUp(@Validated SignupRequestDto signupRequestDto) {
         generalService.userSignUp(signupRequestDto);
         return "success";
     }
 
-    @PostMapping("/admin-signup")
-    public String adminSignUp(@Validated @RequestBody SignupRequestDto signupRequestDto) {
+    @PostMapping(path = "/admin-signup", consumes = "application/x-www-form-urlencoded")
+    public String adminSignUp(@Validated SignupRequestDto signupRequestDto) {
         generalService.adminsignup(signupRequestDto);
         return "success";
     }
     @ResponseBody
-    @PostMapping("/user-signin")
-    public TokenResponseDto userSignIn(@RequestBody SigninRequestDto signinRequestDto) {
-        return generalService.userSignIn(signinRequestDto);
+    @PostMapping(path = "/user-signin" ,consumes = "application/json")
+    public String userSignIn(@RequestBody SigninRequestDto signinRequestDto, HttpServletResponse response) {
+        System.out.println(signinRequestDto.getUsername());
+        System.out.println(signinRequestDto.getPassword());
+        generalService.userSignIn(signinRequestDto,response);
+        return "success";
     }
     @ResponseBody
     @PostMapping("/admin-signin")

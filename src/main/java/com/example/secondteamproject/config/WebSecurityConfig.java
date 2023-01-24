@@ -46,11 +46,6 @@ public class WebSecurityConfig {
         return (web) -> web.ignoring()
                 .requestMatchers(PathRequest.toH2Console())
                 .requestMatchers(PathRequest.toStaticResources().atCommonLocations())
-                //Swagger Ignoring set up.
-                //Writer By Park
-//                .requestMatchers("/v3/api-docs/**", "/configuration/ui",
-//                        "/swagger-resources/**", "/configuration/security",
-//                        "/swagger-ui/**", "/webjars/**", "/swagger/**");
                 .mvcMatchers("/v3/api-docs",
                                         "/configuration/ui",
                                         "/swagger-resources",
@@ -81,15 +76,18 @@ public class WebSecurityConfig {
                 .antMatchers("/general/**").permitAll()
                 .antMatchers("/categories/**").hasRole("ADMIN")
                 .antMatchers("/seller/**").permitAll()
+                .antMatchers("/chatting/**").permitAll()
                 //Swagger set up
                 .antMatchers( "/swagger-ui/**").permitAll()
                 .antMatchers("/swagger-resources/**").permitAll()
+                .antMatchers("/**").permitAll()
                 //Writer By Park
                 .anyRequest().authenticated()
                 .and()
                 // JWT 인증/인가를 사용하기 위한 설정 // redis
                 .addFilterBefore(new JwtAuthFilter(jwtUtil,redisTemplate), UsernamePasswordAuthenticationFilter.class);
-        http.formLogin().disable();
+        http.formLogin().loginPage("/general/login-page").permitAll();
+
         // 401 Error 처리, Authorization 즉, 인증과정에서 실패할 시 처리
         http.exceptionHandling().authenticationEntryPoint(customAuthenticationEntryPoint);
         // 403 Error 처리, 인증과는 별개로 추가적인 권한이 충족되지 않는 경우

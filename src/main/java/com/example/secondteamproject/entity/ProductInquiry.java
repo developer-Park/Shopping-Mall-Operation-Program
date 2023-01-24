@@ -42,4 +42,8 @@ public class ProductInquiry extends Timestamped {
         this.itemId = itemId;
         this.sellerId = itemId.getSeller();
     }
+
+    public void updateOnGoing() {
+        this.statusEnum = StatusEnum.ONGOING;
+    }
 }

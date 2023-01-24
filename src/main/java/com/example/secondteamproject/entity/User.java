@@ -27,8 +27,6 @@ public class User extends Timestamped{
     @Enumerated(value = EnumType.STRING)
     private UserRoleEnum role;
 
-    private String img;
-    private String imgPath;
 
     private String nickname;
 
@@ -38,12 +36,11 @@ public class User extends Timestamped{
 
 
     //파라미터에 email 추가
-    public User(String username, String password, UserRoleEnum role, String img, String nickname, String email) {
+    public User(String username, String password, UserRoleEnum role, String nickname, String email) {
         this.username = username;
         this.password = password;
         this.role = role;
         this.nickname=nickname;
-        this.img=img;
         this.email=email;
     }
 
