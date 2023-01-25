@@ -17,8 +17,4 @@ public interface AdminService {
     void approveSellerRequest(Long id);
     void approveAllSellerRequest();
     void deleteSellerRole(Long id);
-
-
-    void approveAllSellerRequest();
-
 }
