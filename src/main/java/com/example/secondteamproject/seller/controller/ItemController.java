@@ -46,22 +46,22 @@ public class ItemController {
     //판매상품 삭제
 //    @Secured("Seller")
     @DeleteMapping("/seller/items/{id}")
-    public ResponseEntity<String> deleteItem(@PathVariable Long id,UserDetailsImpl userDetails){
+    public ResponseEntity<String> deleteItem(@PathVariable Long id, @AuthenticationPrincipal UserDetailsImpl userDetails){
         return itemService.delete(id,userDetails.getSeller());
     }
 
-    // 관심 상품 조회하기
-    @GetMapping("/products")
-    public Page<Item> getProducts(
-            @RequestParam("page") int page,
-            @RequestParam("size") int size,
-            @RequestParam("sortBy") String sortBy,
-            @RequestParam("isAsc") boolean isAsc,
-            HttpServletRequest request
-    ) {
-        // 응답 보내기
-        return itemService.getProducts(request, page-1, size, sortBy, isAsc);
-    }
+//    // 관심 상품 조회하기
+//    @GetMapping("/products")
+//    public Page<Item> getProducts(
+//            @RequestParam("page") int page,
+//            @RequestParam("size") int size,
+//            @RequestParam("sortBy") String sortBy,
+//            @RequestParam("isAsc") boolean isAsc,
+//            HttpServletRequest request
+//    ) {
+//        // 응답 보내기
+//        return itemService.getProducts(request, page-1, size, sortBy, isAsc);
+//    }
 
 
 

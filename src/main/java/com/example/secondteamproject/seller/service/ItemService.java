@@ -76,7 +76,7 @@ public class ItemService {
 
 
 
-    //판매상품 삭제
+//    판매상품 삭제
     @Transactional
     public ResponseEntity<String> delete(Long id,Seller seller) {
         Item item = itemRepository.findById(id).orElseThrow(
@@ -89,6 +89,9 @@ public class ItemService {
             throw new IllegalArgumentException("해당 판매자 혹은 관리자가 아니면 해당 상품을 삭제할 수 없습니다.");
         }
     }
+
+
+
 //    @Transactional(readOnly = true)
 //    public Page<Item> getProducts(HttpServletRequest request,
 //                                  int page, int size, String sortBy, boolean isAsc) {
