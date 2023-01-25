@@ -76,12 +76,4 @@ public class AdminController {
         adminService.deleteSellerRole(id);
         return "success";
     }
-
-    //판매자 등록요청폼 전체 승인. 유저DB에서 삭제 및 판매자DB에 저장
-    @PostMapping("/seller-requests/")
-    public String approveAllSellerRequest() {
-        adminService.approveAllSellerRequest();
-        return "모든 판매자 승인이 완료되었습니다.";
-    }
-
 }

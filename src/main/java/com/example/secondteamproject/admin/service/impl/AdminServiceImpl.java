@@ -95,7 +95,7 @@ public class AdminServiceImpl implements AdminService {
         );
 
         User user = sellerRequest.getUser();
-        String description = sellerRequest.getContent(
+        String description = sellerRequest.getContent();
         Seller seller = new Seller(user, description);
         sellerRepository.save(seller);
         sellerRequestRepository.delete(sellerRequest);
@@ -105,6 +105,10 @@ public class AdminServiceImpl implements AdminService {
     @Transactional
     public void approveAllSellerRequest() {
         List<SellerRequest> sellerRequestList = sellerRequestRepository.findAll();
+
+        if(sellerRequestList.isEmpty()){
+            throw new IllegalArgumentException("승인할 요청 목록이 없습니다.");
+        }
 
         for (SellerRequest sellerRequest : sellerRequestList) {
             User user = sellerRequest.getUser();
