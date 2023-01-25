@@ -13,7 +13,7 @@ public class chatcontroller {
 
     @GetMapping("/chat")
     public String chatGET(HttpSession session) {
-
+        System.out.println(session);
         System.out.println("@ChatController, chat GET()");
 
         return "chat";

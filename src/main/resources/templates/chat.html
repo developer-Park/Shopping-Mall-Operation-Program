@@ -63,7 +63,6 @@
         })
 
         const websocket = new WebSocket('ws://localhost:8080/ws/chat');
-
         websocket.onmessage = onMessage;
         websocket.onopen = onOpen;
         websocket.onclose = onClose;
@@ -84,9 +83,20 @@
         }
 
         // 채팅창에 들어왔을 때
-        function onOpen(evt) {
-            var str = username + '님이 입장하셨습니다.';
-            websocket.send(str);
+        function onOpen(userId) {
+            $.ajax({
+                type: "GET",
+                url: `/users/chat` + userId,
+                contentType: "application/json",
+                data: JSON.stringify({}),
+                success: function (response) {
+                    if(response === 'success') {
+                        let str = response.data.nickname + '님이 입장하셨습니다.';
+                        console.log(str)
+                        websocket.send(str);
+                    }
+                }
+            })
         }
 
         function onMessage(msg) {
@@ -105,7 +115,7 @@
             }
 
             console.log("cur_session: " + cur_session);
-            sessionId = arr[0].trim();
+          //  sessionId = arr[0].trim();
             if(arr[1] === undefined) {
                 message = '';
             } else {

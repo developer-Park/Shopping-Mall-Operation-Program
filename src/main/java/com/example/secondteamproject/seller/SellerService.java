@@ -25,4 +25,6 @@ public interface SellerService {
     SellerResponseDto update(Long id, SellerRequestDto sellerRequestDto);
 
     List<UserResponseFormDTO> getQuestionsAll();
+
+    List<ItemResponseDto> getItemAll();
 }

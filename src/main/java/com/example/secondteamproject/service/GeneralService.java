@@ -27,10 +27,10 @@ public interface GeneralService {
     User findByUsername(String name);
     Admin findByAdminname(String name);
 
-    TokenResponseDto userSignIn(SigninRequestDto signinRequestDto, HttpServletResponse response);
+    void userSignIn(SigninRequestDto signinRequestDto, HttpServletResponse response);
 
-    TokenResponseDto adminSignIn(SigninRequestDto signinRequestDto);
+    void adminSignIn(SigninRequestDto signinRequestDto, HttpServletResponse response);
 
-    TokenResponseDto sellerSignIn(SigninRequestDto signinRequestDto);
+    void sellerSignIn(SigninRequestDto signinRequestDto, HttpServletResponse response);
     TokenResponseDto removeDuplicated(String accessToken,String refreshToken1);
 }

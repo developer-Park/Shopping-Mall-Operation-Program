@@ -25,9 +25,6 @@ public class UserController {
     private final UserService userService;
 
 
-
-
-
     @PostMapping("/{itemId}/forms")
     @ResponseStatus(HttpStatus.CREATED)
     public ResponseEntity<String> createProductInquiryToSeller(@PathVariable Long itemId, @RequestBody UserRequestFormDTO requestDto, @AuthenticationPrincipal UserDetailsImpl userDetails) {
@@ -72,6 +69,14 @@ public class UserController {
     public SellerResponseDTO getOneSeller(@PathVariable Long sellerId, @AuthenticationPrincipal UserDetailsImpl userDetails) {
         return userService.getOneSeller(sellerId);
     }
+
+
+    @GetMapping("/chat/{userId}")
+    public String getUserInfo(@PathVariable Long userId) {
+        userService.getOneUser(userId);
+        return "success";
+    }
+
 
 }
 

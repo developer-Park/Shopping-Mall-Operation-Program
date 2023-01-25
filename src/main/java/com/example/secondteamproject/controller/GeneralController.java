@@ -57,11 +57,28 @@ public class GeneralController {
         return "success";
     }
 
+
+    @PostMapping(path = "/user-signup")
+    public String userSignUpForPostMan(@Validated @RequestBody SignupRequestDto signupRequestDto) {
+        generalService.userSignUp(signupRequestDto);
+        return "success";
+    }
+
     @PostMapping(path = "/admin-signup", consumes = "application/x-www-form-urlencoded")
     public String adminSignUp(@Validated SignupRequestDto signupRequestDto) {
         generalService.adminsignup(signupRequestDto);
         return "success";
     }
+    @PostMapping(path = "/admin-signup")
+    public String adminSignUpForPostMan(@Validated @RequestBody SignupRequestDto signupRequestDto) {
+        generalService.adminsignup(signupRequestDto);
+        return "success";
+    }
+
+
+
+
+
     @ResponseBody
     @PostMapping(path = "/user-signin" ,consumes = "application/json")
     public String userSignIn(@RequestBody SigninRequestDto signinRequestDto, HttpServletResponse response) {
@@ -70,16 +87,19 @@ public class GeneralController {
         generalService.userSignIn(signinRequestDto,response);
         return "success";
     }
+
     @ResponseBody
     @PostMapping("/admin-signin")
-    public TokenResponseDto adminSignIn(@RequestBody SigninRequestDto signinRequestDto) {
-        return generalService.adminSignIn(signinRequestDto);
+    public String adminSignIn(@RequestBody SigninRequestDto signinRequestDto, HttpServletResponse response) {
+        generalService.adminSignIn(signinRequestDto,response);
+        return "success";
     }
 
     @ResponseBody
     @PostMapping("/seller-signin")
-    public TokenResponseDto sellerSignIn(@RequestBody SigninRequestDto signinRequestDto) {
-        return generalService.sellerSignIn(signinRequestDto);
+    public String sellerSignIn(@RequestBody SigninRequestDto signinRequestDto, HttpServletResponse response) {
+        generalService.sellerSignIn(signinRequestDto,response);
+        return "success";
     }
     /**
      * Delete user
