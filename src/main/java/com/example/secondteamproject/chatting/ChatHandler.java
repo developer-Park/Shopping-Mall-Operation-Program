@@ -15,7 +15,10 @@ public class ChatHandler extends TextWebSocketHandler {
 
     @Override
     protected void handleTextMessage(WebSocketSession session, TextMessage message) throws Exception {
+        System.out.println("헤깔림방지"+session.getHandshakeHeaders());
+        System.out.println(message);
         String payload = message.getPayload();
+
         System.out.println("payload: " + payload);
 
         for (WebSocketSession sess : list) {
@@ -29,6 +32,7 @@ public class ChatHandler extends TextWebSocketHandler {
 
         list.add(session);
         System.out.println(list);
+        System.out.println(session.getHandshakeHeaders()+"이건뭐지");
         System.out.println(session.getPrincipal()+ "프린시플찾기");
         System.out.println(session.getAttributes()+"어트리뷰트");
 

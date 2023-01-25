@@ -54,23 +54,26 @@ public class SellerController {
     }
 
     //판매자 프로필 조회
-    @GetMapping("/seller/profile/{id}")
+    @GetMapping("/profile/{id}")
     public ResponseEntity<SellerResponseDto> findSeller(@PathVariable Long id){
         return ResponseEntity.status(HttpStatus.OK).body(sellerService.findSellerById(id));
     }
 
     //판매자 프로필 수정
-    @PutMapping("/seller/profile/{id}")
+    @PutMapping("/profile/{id}")
     public ResponseEntity<SellerResponseDto> updateSeller(@PathVariable Long id, @RequestBody SellerRequestDto sellerRequestDto){
         return  ResponseEntity.status(HttpStatus.OK).body(sellerService.update(id,sellerRequestDto));
     }
     //고객 요청 조회
-    @GetMapping("/seller/questions")
+    @GetMapping("/questions")
     public ResponseEntity<List<UserResponseFormDTO>> getQuestionsAll(){
         return ResponseEntity.status(HttpStatus.OK).body(sellerService.getQuestionsAll());
     }
 
-
+    @GetMapping("/items")
+    public  ResponseEntity<List<ItemResponseDto>> getItemList(){
+        return ResponseEntity.status(HttpStatus.OK).body(sellerService.getItemAll());
+    }
 
 
 }

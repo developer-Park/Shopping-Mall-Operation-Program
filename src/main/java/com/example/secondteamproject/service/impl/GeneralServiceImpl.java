@@ -93,7 +93,7 @@ public class GeneralServiceImpl implements GeneralService {
      * @return AccessToken, Refresh Token
      */
     @Transactional(readOnly = true)
-    public TokenResponseDto userSignIn(SigninRequestDto signinRequestDto, HttpServletResponse response) {
+    public void userSignIn(SigninRequestDto signinRequestDto, HttpServletResponse response) {
         String username = signinRequestDto.getUsername();
         String password = signinRequestDto.getPassword();
         User user = userRepository.findByUsername(username);
@@ -105,14 +105,12 @@ public class GeneralServiceImpl implements GeneralService {
         }
         String accessToken = jwtUtil.createToken(user.getUsername(), user.getRole());
         String refreshToken1 = jwtUtil.refreshToken(user.getUsername(), user.getRole());
-        TokenResponseDto tokenResponseDto = removeDuplicated(accessToken,refreshToken1);
         response.addHeader(JwtUtil.AUTHORIZATION_HEADER, accessToken);
-
-        return tokenResponseDto;
+        response.addHeader(JwtUtil.REFRESH_AUTHORIZATION_HEADER, refreshToken1);
     }
 
     @Transactional(readOnly = true)
-    public TokenResponseDto adminSignIn(SigninRequestDto signinRequestDto) {
+    public void adminSignIn(SigninRequestDto signinRequestDto,HttpServletResponse response) {
         String username = signinRequestDto.getUsername();
         String password = signinRequestDto.getPassword();
         Admin admin = adminRepository.findByAdminName(username);
@@ -124,11 +122,13 @@ public class GeneralServiceImpl implements GeneralService {
         }
         String accessToken = jwtUtil.createToken(admin.getAdminName(), admin.getRole());
         String refreshToken1 = jwtUtil.refreshToken(admin.getAdminName(), admin.getRole());
-        TokenResponseDto tokenResponseDto = removeDuplicated(accessToken,refreshToken1);
-        return tokenResponseDto;
+        response.addHeader(JwtUtil.AUTHORIZATION_HEADER, accessToken);
+        response.addHeader(JwtUtil.REFRESH_AUTHORIZATION_HEADER, refreshToken1);
+
+
     }
     @Transactional(readOnly = true)
-    public TokenResponseDto sellerSignIn(SigninRequestDto signinRequestDto) {
+    public void sellerSignIn(SigninRequestDto signinRequestDto,HttpServletResponse response) {
         String username = signinRequestDto.getUsername();
         String password = signinRequestDto.getPassword();
         Seller seller = sellerRepository.findBySellerName(username);
@@ -140,8 +140,8 @@ public class GeneralServiceImpl implements GeneralService {
         }
         String accessToken = jwtUtil.createToken(seller.getSellerName(), seller.getRole());
         String refreshToken1 = jwtUtil.refreshToken(seller.getSellerName(), seller.getRole());
-        TokenResponseDto tokenResponseDto = removeDuplicated(accessToken,refreshToken1);
-        return tokenResponseDto;
+        response.addHeader(JwtUtil.AUTHORIZATION_HEADER, accessToken);
+        response.addHeader(JwtUtil.REFRESH_AUTHORIZATION_HEADER, refreshToken1);
     }
 
 

@@ -103,4 +103,16 @@ public class SellerServiceImpl implements SellerService {
 
     }
 
+    @Transactional
+    public List<ItemResponseDto> getItemAll(){
+
+        List<Item> items = itemRepository.findAllByOrderByModifiedAtDesc();
+        List<ItemResponseDto> ItemResponseDtoList = new ArrayList<>();
+
+        for (Item item : items) {
+            ItemResponseDtoList.add(new ItemResponseDto(item));
+        }
+        return ItemResponseDtoList;
+    }
+
 }
