@@ -45,6 +45,7 @@ public class Seller extends Timestamped {
         this.point = 10000;
     }
 
+    //user를 파라미터로 받는 생성자 
     public Seller(User user, String description) {
         this.sellerName = user.getUsername();
         this.password = user.getPassword();

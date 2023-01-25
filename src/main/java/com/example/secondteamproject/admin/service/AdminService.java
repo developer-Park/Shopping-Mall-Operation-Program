@@ -15,6 +15,7 @@ public interface AdminService {
     List<SellerRequestListResponseDto> getAllSellerRequest(Pageable pageable);
     SellerRequestResponseDto getSellerRequest(Long id);
     void approveSellerRequest(Long id);
+    void approveAllSellerRequest();
     void deleteSellerRole(Long id);
 
 

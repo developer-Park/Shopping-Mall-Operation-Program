@@ -14,19 +14,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-
-//- 운영자
-//    - 조회
-//        - 고객 목록 : 고객들의 목록을 페이징하며 조회
-//        - 판매자 목록 : 판매자들의 목록을 페이징하며 조회
-//        - 판매자 등록 요청폼 목록 : 판매자 등록 요청목록을 조회
-//    - 권한 등록
-//        - 판매자 권한 승인 : 판매자 등록 요청을 승인
-//    - 삭제
-//        - 판매자 권한 : 유저의 판매자 권한을 삭제
-
-
-
 //WebSecurityConfig에서 admin role만 접근하도록 바꿔주기
 @RestController
 @RequiredArgsConstructor
@@ -74,6 +61,13 @@ public class AdminController {
     public String approveSellerRequest(@PathVariable Long id) {
         adminService.approveSellerRequest(id);
         return "판매자 승인이 완료되었습니다.";
+    }
+
+    //판매자 등록요청폼 전체 승인. 유저DB에서 삭제 및 판매자DB에 저장
+    @PostMapping("/seller-requests/")
+    public String approveAllSellerRequest() {
+        adminService.approveAllSellerRequest();
+        return "모든 판매자 승인이 완료되었습니다.";
     }
 
     //판매자 1개 권한 삭제. 판매자DB에서 삭제 및 유저DB에 저장
