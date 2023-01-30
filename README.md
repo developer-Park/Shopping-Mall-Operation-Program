@@ -21,14 +21,14 @@
 ## 목차
 
 <!-- TOC -->
-* [💻 프로젝트 개발 환경](#💻)
-* [👥 팀원 소개](#팀원-소개)
-    * [역할](#역할)
-* [프로젝트 요구사항](#프로젝트-요구사항)
+* [💻 Project development environment](#💻)
+* [👥 Team Members](#Team-Members)
+    * [Role](#Role)
+* [Project requirement](#Project-requirement)
 * [Usecase](#usecase)
 * [Table ERD](#table-erd)
 * [Class UML](#class-uml)
-* [API 명세](#api-명세)
+* [API details](#api-details)
 <!-- TOC -->
 
 
@@ -36,11 +36,11 @@
 
 
 ## 💻
-<details><summary> &nbsp 프로젝트 개발 환경</summary>
+<details><summary> &nbsp Project development environment</summary>
 
-- spring 2.7.7
-
-- JDK 11
+- spring 2.7.6
+- h2
+- JDK 17
 - build.gradle
     ```
    dependencies {
@@ -74,35 +74,36 @@
 - application.properties
 
   ```
-   spring.jpa.hibernate.ddl-auto=create
-    spring.jpa.generate-ddl=true
-    
-    spring.jpa.properties.hibernate.format_sql=true
-    spring.jpa.properties.hibernate.highlight_sql=true
-    logging.level.org.hibernate.SQL=debug
-    logging.level.org.hibernate.type.descriptor.sql=trace
-    
-    spring.h2.console.enabled=true
-    spring.datasource.url=jdbc:h2:mem:db;MODE=MYSQL;
-    spring.datasource.username=sa
-    
-    jwt.secret.key=7ZWt7ZW0OTntmZTsnbTtjIXtlZzqta3snYTrhIjrqLjshLjqs4TroZzrgpjslYTqsIDsnpDtm4zrpa3tlZzqsJzrsJzsnpDrpbzrp4zrk6TslrTqsIDsnpA=
-    
-    spring.redis.host=localhost
-    spring.redis.port=6379
-    
-    profile.default.image.path=/Users/sj/Downloads/default_profile.png
-    profile.image.dir=/Users/sj/Downloads/user_profile_image/
+  spring.h2.console.enabled=true
+spring.datasource.url=jdbc:h2:mem:db;MODE=MYSQL;
+spring.datasource.username=
+spring.datasource.password=
+
+spring.thymeleaf.cache=false
+
+spring.jpa.properties.hibernate.show_sql=true
+logging.level.org.hibernate.type.descriptor.sql=trace
+
+jwt.secret.key=
+
+##Redis
+spring.redis.host=localhost
+spring.redis.port=6379
+
+##Swagger
+spring.mvc.pathmatch.matching-strategy=ant_path_matcher
+
     ```
 </details>
 <br>
 
-## 👥 팀원 소개
-이상환, 이송언, 이신희, 장성준, 조성제
+## 👥 Team Members
+JeongHun Park(Parker), Mun ji Young, Ji seop Lee, Hyun jae Jang
 
-### 역할
 
-| 담당자 | 역할                                                                          |
+### Role
+
+| Manager | Role                                                                          |
 |:---:|:----------------------------------------------------------------------------|
 |     |                                                                             |
 | 이상환 | - 유저 조회<br/>- 판매자 권한 요청/승인/삭제<br/>- 권한 요청 목록 조회                             |
@@ -114,59 +115,61 @@
 
 <br>
 
-## 프로젝트 요구사항
-<details><summary> 명세
-</summary>- 우리팀만의 매칭 서비스 프로젝트 만들기
-[ 고객-판매자 매칭 서비스 (매칭주제 자유) ]
+## Project requirement
+<details><summary> details
+</summary>- Creating our own matching service project
+[ Customer-seller matching service (free matching subject)]
+- Member signup/login/logout/token function
+- User permission function
+    - Users are divided into three rights.
+        - Customer: The user who first registered as a member
+        - Seller: Customers who have been approved as a seller
+        - Operator: User who approves the seller
+- Functions by user authority
+    - customer
+        - Lookup
+            - My profile setting and inquiry: You can set and view profiles (nickname, image) for each user
+            - List of all sales products: Paging through the list of sales products
+            - List of all sellers: search through the list of sellers by paging
+            - Seller information: Select a seller to view profile information (nickname, image, introduction + matching topic information)
+        - write
+            - Request Form to Seller: Send the request details (matching topic information) to the seller
+        - Permission request
+            - Seller registration request: Fill out the seller profile request information and request seller registration to the operator
+            
+    - seller
+        - Lookup
+            - Set and view my seller profile: set and search profile for each seller (nickname, image, introduction + matching topic information)
+            - Search my sales products: Paging through the list of products I am selling
+            - Search customer request list: Paging and search the customer request list of all products
+        - Enrollment
+            - Register my sales product: Fill out the sales product information and register it on the list
+        - Modify
+            - Modify/Delete My Selling Products: Write the selling product information and edit it in the list
+        - delete
+            - Delete my sales product: Write the sales product information and delete it from the list
+        - Customer request processing: Accept customer request and complete processing
+    - Operator
+        - Lookup
+            - Customer List: Paging through the list of customers
+            - Seller List: Paging and search the list of sellers
+            - Seller registration request form list: Search the seller registration request list
+        - Permission registration
+            - Seller permission approval: Approve the seller registration request
+        - delete
+            - Seller authority: Delete user's seller authority
+            
+- Search function
+    - Keyword search: Add a search function by entering a search keyword when searching for paging lists.
+    - Seller Search: Add a function to search by seller name when searching the paging list.
 
-- 회원가입/로그인/로그아웃/토큰 기능
-- 유저 권한 기능
-    - 유저는 3가지 권한으로 나뉩니다.
-        - 고객 : 최초 회원가입한 유저
-        - 판매자 : 판매자 승인을 받은 고객
-        - 운영자 : 판매자 승인을 해주는 유저
-- 유저 권한 별 기능
-    - 고객
-        - 조회
-            - 나의 프로필 설정 및 조회 : 유저별 프로필(닉네임, 이미지)을 설정할 수 있고 조회
-            - 전체 판매상품 목록 : 판매 상품목록을 페이징하며 조회
-            - 전체 판매자 목록 : 판매자들의 목록을 페이징하며 조회
-            - 판매자 정보 : 판매자를 선택해서 프로필 정보(닉네임,이미지,소개글+매칭주제 정보)를 조회
-        - 작성
-            - 판매자에게 요청폼 : 판매자에게 요청내용(매칭주제 정보) 보내기
-        - 권한 요청
-            - 판매자 등록 요청 : 판매자 프로필 요청 정보를 작성해서 운영자에게 판매자 등록 요청
-    - 판매자
-        - 조회
-            - 나의 판매자 프로필 설정 및 조회 : 판매자별 프로필(닉네임,이미지,소개글+매칭주제 정보)을 설정, 조회
-            - 나의 판매상품 조회 : 내가 판매중인 상품 목록을 페이징하며 조회
-            - 고객요청 목록 조회 : 모든상품의 고객요청 목록을 페이징하며 조회
-        - 등록
-            - 나의 판매상품 등록 : 판매 상품 정보를 작성하여 목록에 등록
-        - 수정
-            - 나의 판매상품 수정/삭제 : 판매 상품 정보를 작성하여 목록에서 수정
-        - 삭제
-            - 나의 판매상품 삭제 : 판매 상품 정보를 작성하여 목록에서 삭제
-        - 고객요청 처리 : 고객요청을 수락하고 완료처리
-    - 운영자
-        - 조회
-            - 고객 목록 : 고객들의 목록을 페이징하며 조회
-            - 판매자 목록 : 판매자들의 목록을 페이징하며 조회
-            - 판매자 등록 요청폼 목록 : 판매자 등록 요청목록을 조회
-        - 권한 등록
-            - 판매자 권한 승인 : 판매자 등록 요청을 승인
-        - 삭제
-            - 판매자 권한 : 유저의 판매자 권한을 삭제
-- 검색 기능
-    - 키워드 검색 : 페이징 목록 조회를 할때 검색 키워드를 입력해 검색하는 기능을 추가해보세요.
-    - 판매자 검색 : 페이징 목록 조회를 할때 판매자명으로 검색하는 기능을 추가해보세요.
 
-
-- 고객-판매자 대화 기능
-    - 대화방 생성 : 판매가 시작될때 대화방이 생성된다.
-    - 대화 메세지 전송기능 : 고객과 판매자가 판매건에 대한 대화를 나눈다.
-    - 대화방 메세지 목록 조회 : 고객과 판매자가 나눈 대화목록을 조회할 수 있다.
-    - 대화방 종료 : 판매가 완료될때 대화방이 중지되고 더이상 메세지 전송이 불가능하다.
+- Customer-seller conversation function
+    - Chat room creation: A chat room is created when sales start.
+    - Conversation message transmission function: Customer and seller have a conversation about the sale.
+    - Chat room message list search: You can search the chat list between the customer and the seller.
+    - Chat room termination: When the sale is completed, the chat room is stopped and no more messages can be sent.
+    
 </details>
 
 <br>
@@ -184,7 +187,7 @@
 ## Class UML
 ![ClassUML.png](document/ClassUML.png)
 
-## API 명세
+## API details
 ![img.png](document/UserAPI.png)
 
 ![img.png](document/AdminAPI.png)
