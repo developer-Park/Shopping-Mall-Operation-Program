@@ -106,7 +106,7 @@ JeongHun Park(Parker), Mun ji Young, Ji seop Lee, Hyun jae Jang
 | Manager | Role                                                                          |
 |:---:|:----------------------------------------------------------------------------|
 |     |                                                                             |
-| JeongHun Park | - 유저 조회<br/>- 판매자 권한 요청/승인/삭제<br/>- 권한 요청 목록 조회                             |
+| Parker | - Spring Security,JWT Token,Redis<br/>- Signup,Signin,Logout<br/>- Category section,User section,Point section<br/>- Exception section, HTML|
 | Mun ji Young | -  시큐리티<br/>- 회원가입 / 로그인<br/>-  로그아웃<br/>- 프로필 설정/조회<br/>- 리드미 작성           |
 | Ji seop Lee | - 전체 판매 상품 조회<br/>- 판매자 등록 상품 조회/검색/등록/수정/삭제(판매자 포함)<br/>- 채팅<br/>- 프로젝트 발표 |
 | Hyun jae Jang | - 시큐리티(리프레시 토큰)<br/>-  레디스 적용<br/>- 카테고리 조회/생성/수정/삭제                        |
