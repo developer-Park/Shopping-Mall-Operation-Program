@@ -1,6 +1,8 @@
 
 # 777 Team Lucky Seven 
->**“Customer, seller matching transaction service”**
+>**“It is an online shopping mall management program focused on back-end development. Implemented the basic functions of the shopping mall.”**
+
+
 
 <div>
  <img src="https://img.shields.io/badge/Java-007396?style=for-the-badge&logo=openjdk&logoColor=white">
@@ -12,18 +14,15 @@
 <div>
  <img src="https://img.shields.io/badge/Hibernate-59666C?style=for-the-badge&logo=Hibernate&logoColor=white">
  <img src="https://img.shields.io/badge/redis-%23DD0031.svg?&style=for-the-badge&logo=redis&logoColor=white">
- </div>
-<div>
- <img src="https://img.shields.io/badge/IntelliJ_IDEA-000000.svg?style=for-the-badge&logo=intellij-idea&logoColor=white"><img src="https://img.shields.io/badge/github-181717?style=for-the-badge&logo=github&logoColor=white">
+  <img src="https://img.shields.io/badge/IntelliJ_IDEA-000000.svg?style=for-the-badge&logo=intellij-idea&logoColor=white"><img src="https://img.shields.io/badge/github-181717?style=for-the-badge&logo=github&logoColor=white">
 <img src="https://img.shields.io/badge/postman-FF6C37?style=for-the-badge&logo=postman&logoColor=white">
-</div>
+ </div>
 
-## 목차
+## Index
 
 <!-- TOC -->
 * [💻 Project development environment](#💻)
 * [👥 Team Members](#Team-Members)
-    * [Role](#Role)
 * [Project requirement](#Project-requirement)
 * [Usecase](#usecase)
 * [Table ERD](#table-erd)
@@ -35,7 +34,7 @@
 <br>
 
 
-## 💻
+## 💻 Project development environment
 <details><summary> &nbsp Project development environment</summary>
 
 - spring 2.7.6
@@ -73,14 +72,12 @@
 
 - application.properties
 
-  ```
-  spring.h2.console.enabled=true
+```
+spring.h2.console.enabled=true
 spring.datasource.url=jdbc:h2:mem:db;MODE=MYSQL;
 spring.datasource.username=
 spring.datasource.password=
-
 spring.thymeleaf.cache=false
-
 spring.jpa.properties.hibernate.show_sql=true
 logging.level.org.hibernate.type.descriptor.sql=trace
 
@@ -93,27 +90,31 @@ spring.redis.port=6379
 ##Swagger
 spring.mvc.pathmatch.matching-strategy=ant_path_matcher
 
-    ```
+```
 </details>
 <br>
 
+
 ## 👥 Team Members
+<div>
+ Team notion : https://lively-beluga-779.notion.site/0c49ffa349e34b138606d192a438f9f9
+ 
+ </div>
 JeongHun Park(Parker), Mun ji Young, Ji seop Lee, Hyun jae Jang
 
 
 ### Role
 
-| Manager | Role                                                                          |
+| Member | Role                                                                          |
 |:---:|:----------------------------------------------------------------------------|
-|     |                                                                             |
-| Parker | - Spring Security,JWT Token,Redis<br/>- Signup,Signin,Logout<br/>- Category section,User section,Point section<br/>- Exception section, HTML|
-| Mun ji Young | -  시큐리티<br/>- 회원가입 / 로그인<br/>-  로그아웃<br/>- 프로필 설정/조회<br/>- 리드미 작성           |
-| Ji seop Lee | - 전체 판매 상품 조회<br/>- 판매자 등록 상품 조회/검색/등록/수정/삭제(판매자 포함)<br/>- 채팅<br/>- 프로젝트 발표 |
-| Hyun jae Jang | - 시큐리티(리프레시 토큰)<br/>-  레디스 적용<br/>- 카테고리 조회/생성/수정/삭제                        |
-| | - 거래 조회/요청/수락<br/>- 판매자 조회<br/>- 프로필 이미지 저장/조회<br/>- 시연 영상 제작               |
-
-
+| Parker | - Spring Security,JWT Token,Redis<br/>- Signup,Signin,Logout<br/>- Category function,User function,Point function<br/>- Exception function, HTML|
+| Mun ji Young | -  Admin function<br/> - Search function|
+| Ji seop Lee | - Paging function<br/> - Swagger function|
+| Hyun jae Jang | - Seller function|
 <br>
+
+## Demonstration video
+https://www.youtube.com/watch?v=LYVYWcRVgPg
 
 ## Project requirement
 <details><summary> details
@@ -174,34 +175,34 @@ JeongHun Park(Parker), Mun ji Young, Ji seop Lee, Hyun jae Jang
 
 <br>
 
-## Usecase
-![Usecase.png](document/usecase.png)
+## Sequence Diagram
+![sequence](https://user-images.githubusercontent.com/83831110/225190929-a9499ea2-52c4-4e8a-a7c7-c4e4343fa617.png)
 
 <br>
 
 ## Table ERD
-![TableERD.png](document/TableERD.png)
+![erd](https://user-images.githubusercontent.com/83831110/225190883-a18cb469-7147-4312-b9d3-bff25864dd89.png)
+
 
 <br>
 
-## Class UML
-![ClassUML.png](document/ClassUML.png)
+## Wireframe
+![wireframe](https://user-images.githubusercontent.com/83831110/225191022-b601c267-681e-4d7d-b4c6-276259c1f05f.png)
 
-## API details
-![img.png](document/UserAPI.png)
+## API documents
+![general](https://user-images.githubusercontent.com/83831110/225192197-e99ed9b9-2aa9-43b3-9637-b5344e040ff1.png)
 
-![img.png](document/AdminAPI.png)
+![user](https://user-images.githubusercontent.com/83831110/225192758-ff558489-835d-4e22-8ff1-69141b6eefb9.png)
 
-![img.png](document/ItemAPI.png)
+![seller](https://user-images.githubusercontent.com/83831110/225193457-a84729b5-68cb-43a3-9134-a1a24979b18d.png)
 
-![img.png](document/TransactionAPI.png)
+![admin](https://user-images.githubusercontent.com/83831110/225194515-3e77f425-8a86-4e71-b11e-91c8e013543b.png)
 
-![img.png](document/CategoryAPI.png)
+![category](https://user-images.githubusercontent.com/83831110/225194792-9a062bcd-d08f-481b-970d-7d37b7712084.png)
 
-![img.png](document/ChatAPI.png)
+![point](https://user-images.githubusercontent.com/83831110/225196066-5c174a38-5b35-4d2f-9a68-c23c70afbf4a.png)
 
-
-
+![chat](https://user-images.githubusercontent.com/83831110/225196166-8d703435-c299-4699-b8e1-328f1dc215c9.png)
 
 
 
