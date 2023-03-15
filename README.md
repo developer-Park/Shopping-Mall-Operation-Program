@@ -101,14 +101,12 @@ spring.mvc.pathmatch.matching-strategy=ant_path_matcher
  Team notion : https://lively-beluga-779.notion.site/0c49ffa349e34b138606d192a438f9f9
  
  </div>
-JeongHun Park(Parker), Mun ji Young, Ji seop Lee, Hyun jae Jang
-
 
 ### Role
 
 | Member | Role                                                                          |
 |:---:|:----------------------------------------------------------------------------|
-| Parker | - Spring Security,JWT Token,Redis<br/>- Signup,Signin,Logout<br/>- Category function,User function,Point function<br/>- Exception function, HTML|
+| JeongHun Park(Parker) | - Spring Security,JWT Token,Redis<br/>- Signup,Signin,Logout<br/>- Category function,User function,Point function<br/>- Exception function, HTML|
 | Mun ji Young | -  Admin function<br/> - Search function|
 | Ji seop Lee | - Paging function<br/> - Swagger function|
 | Hyun jae Jang | - Seller function|
