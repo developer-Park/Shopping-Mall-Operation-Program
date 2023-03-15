@@ -21,20 +21,21 @@
 ## Index
 
 <!-- TOC -->
-* [💻 Project development environment](#💻)
-* [👥 Team Members](#Team-Members)
-* [Project requirement](#Project-requirement)
-* [Usecase](#usecase)
+* [Project environment](#project-environment)
+* [Team Members](#team-members)
+* [Demonstration video](#demonstration-video)
+* [Project requirement](#project-requirement)
+* [Sequence Diagram](#sequence-diagram)
 * [Table ERD](#table-erd)
-* [Class UML](#class-uml)
-* [API details](#api-details)
+* [Wireframe](#wireframe)
+* [API documents](#api-documents)
 <!-- TOC -->
 
 
 <br>
 
 
-## 💻 Project development environment
+## Project environment
 <details><summary> &nbsp Project development environment</summary>
 
 - spring 2.7.6
@@ -95,7 +96,7 @@ spring.mvc.pathmatch.matching-strategy=ant_path_matcher
 <br>
 
 
-## 👥 Team Members
+## Team Members
 <div>
  Team notion : https://lively-beluga-779.notion.site/0c49ffa349e34b138606d192a438f9f9
  
